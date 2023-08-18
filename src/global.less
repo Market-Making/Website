@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Karla';
+  font-family: 'FugazOne';
   src: url('/FugazOne-Regular.ttf') format('truetype');
 }
 
@@ -11,6 +11,7 @@ iframe {
 
 * {
   font-family: 'FugazOne';
+  color: #fff;
 }
 
 body,
@@ -23,4 +24,68 @@ html {
 p {
   margin: 0;
   padding: 0;
+}
+.flex{
+  display: flex;
+}
+.flex-j-c-c{
+  justify-content: center;
+}
+.flex-j-c-s-b{
+  justify-content: space-between;
+}
+.flex-d-c{
+  flex-direction: column;
+}
+.f1{
+  flex:1;
+}
+
+
+.pagination {
+  display: flex;
+  position: absolute;
+  left: 15%;
+  top: -150px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  z-index: 11;
+}
+
+.pagination__button {
+  display: inline-block;
+  position: relative;
+  width: 36px;
+  height: 20px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination__button:before,
+.pagination__button:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(50% - 1px);
+  width: 100%;
+  box-shadow: 0 1px 0 #0b0d14;
+}
+
+.pagination__button:before {
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.pagination__button:after {
+  height: 12px;
+  transform: translateY(-2px);
+  background-color: #ffffff;
+  opacity: 0;
+  transition: 0.5s opacity;
+}
+
+.pagination__item--active .pagination__button:after {
+  opacity: 1;
 }

@@ -9,6 +9,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "swiper": "^10.2.0",
     "umi": "^4.0.76"
   },
   "devDependencies": {
