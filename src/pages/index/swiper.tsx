@@ -7,6 +7,7 @@ import "swiper/css";
 import './index.less';
 
 export default function App() {
+    const [swiper, setSwiper] = useState<any>();
     const [navList, setNavList] = useState([true, false, false, false, false]);
     const SwiperButtonNext = ({ item, index }: any) => {
         const swiper = useSwiper();
@@ -24,10 +25,12 @@ export default function App() {
             <a className="pagination__button"></a>
         </li>;
     };
+
     return (
         <div style={{ padding: '0 110px' }}>
 
-            <Swiper style={{ height: '500px' }}>
+            <Swiper style={{ height: '500px' }}
+                onSwiper={(swiper) => setSwiper(swiper)}>
                 <SwiperSlide>
                     <div className="s1">
                         <p className="swiper-no-swiping">Passive Market Making</p>
