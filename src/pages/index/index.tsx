@@ -10,7 +10,7 @@ export default function HomePage() {
       <div className='flex sol'>
         <div className='f1'>
           <div className='left flex flex-d-c flex-j-c-c'>
-            <p className='title'>Hash Capital</p>
+            <p className='title' style={{fontFamily: 'FugazOne'}}>Hash Capital</p>
             <p>Hash Capital is a leading market marker, algorithmic trader, and proprietary player in digital assets.
             </p>
             <p>
@@ -23,7 +23,7 @@ export default function HomePage() {
         </div>
       </div>
       <Swiper />
-      <div className='flex flex-j-c-s-b' style={{padding:'0 110px'}}>
+      <div className='flex flex-j-c-f-e' style={{padding:'0 110px',marginTop:'30px'}}>
         <div>
           <div>
             JOIN US
