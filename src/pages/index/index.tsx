@@ -10,7 +10,7 @@ export default function HomePage() {
       <div className='flex sol'>
         <div className='f1'>
           <div className='left flex flex-d-c flex-j-c-c'>
-            <p className='title' style={{fontFamily: 'FugazOne'}}>Hash Capital</p>
+            <p className='title' style={{ fontFamily: 'FugazOne' }}>Hash Capital</p>
             <p>Hash Capital is a leading market marker, algorithmic trader, and proprietary player in digital assets.
             </p>
             <p>
@@ -23,11 +23,11 @@ export default function HomePage() {
         </div>
       </div>
       <Swiper />
-      <div className='flex flex-j-c-f-e' style={{padding:'0 110px',marginTop:'30px'}}>
+      <div className='flex flex-j-c-f-e us' style={{ margin: '0 110px', marginTop: '30px', gap: '40px', padding: '30px' }}>
         <div>
-          <div>
+          <h4>
             JOIN US
-          </div>
+          </h4>
           <div>
             FOLLOW US
             <br />
@@ -42,17 +42,22 @@ export default function HomePage() {
         </div>
 
         <div>
-          <div>
+          <h4>
             CREATE LIQUID MARKETS
-          </div>
+          </h4>
           <div>
             WINTERMUTE VENTURES <br />
             Contact us
           </div>
         </div>
       </div>
-      <div style={{ padding: '0 110px' }}>
-        <h1>STATEMENTS</h1>
+      <div style={{ padding: '0 110px',marginTop:'30px' }}>
+
+        <div className='flex flex-j-c-s-b'>
+          <span>©2023 BY WINTERMUTE TRADING LTD</span>
+        </div>
+      </div>
+      <div className=' us' style={{ margin: '30px 110px', gap: '40px', padding: '30px' }}>
         <p>
           Hash Capital is a proprietary player that provides liquidity on various crypto assets. Hash Capital does not represent investors in the management of any encrypted assets or fiat currencies, nor does it represent investors or customers holding fiat currencies or encrypted assets. Hash Capital is not authorized or regulated by any regulatory authority, which means that any party transacting with Hash Capital may not benefit from the protections normally afforded when dealing with regulated entities, such as any compensation or ombudsman schemes.
           <br />
@@ -62,11 +67,6 @@ export default function HomePage() {
           The financial products detailed in this document are not intended for, and are not available to, persons or entities organized in any prohibited jurisdiction. Nothing in this document should be construed as constitute an offer to sell, an invitation to buy, distribute or recommend the financial products detailed in this document to any person or entity in a prohibited jurisdiction. Virtual assets and their derivatives must not be traded on regulated exchanges or operate under a generally accepted and transparent set of rules. Therefore, you may not be eligible for the same level of the rights and protections you would normally enjoy when investing in products on a regulated exchange. Fraud and market misconduct in virtual assets is not uncommon, which increases the risk of loss. Hash Capital makes no warranties (whether express or implied) or makes any representations that the contents of this document are reliable and accurate and complete.
 
         </p>
-        <div className='flex flex-j-c-s-b'>
-          <span>2023 BY WINTERMUTE TRADING LTD</span>
-          <span>PRIVACY POLICY</span>
-          <span> COOKIES POLICY</span>
-        </div>
       </div>
       <div>
 
