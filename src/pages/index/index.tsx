@@ -26,9 +26,9 @@ export default function HomePage() {
       <Swiper />
 
       <div className='us' style={{ margin: '0 110px', marginTop: '30px', gap: '40px', padding: '30px' }}>
-        <h3>Connect Us</h3>
+        <h3>Connections</h3>
         <div className='flex flex-j-c-s-b' >
-          <ul>
+          <ul className='nav2'>
             <li><a target='_blank' href='https://twitter.com/capital_hash'>
               Twitter
             </a></li>
@@ -38,6 +38,20 @@ export default function HomePage() {
             <li>
               <a target='_blank' href='https://github.com/orgs/Market-Making'>
                 Github
+              </a>
+            </li>
+
+          </ul>
+          <ul className='nav2'>
+            <li><a target='_blank' href='https://t.me/antheabradley'>
+            Anthea Bradley
+            </a></li>
+            <li>
+              <a target='_blank' href='https://t.me/Frank_lin007'>Franklin Hunter</a>
+            </li>
+            <li>
+              <a target='_blank' href='https://t.me/Carina8899'>
+              Carina Loyal
               </a>
             </li>
 

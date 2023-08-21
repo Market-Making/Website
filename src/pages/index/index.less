@@ -20,3 +20,45 @@
     }
 
 }
+.nav2 {
+    position: relative;
+    div {
+      display: inline-block;
+    }
+    a {
+      margin: auto 15px;
+      position: relative;
+
+      &:hover {
+        color: #ffffff;
+      }
+
+      &::before {
+        left: 0;
+        content: '';
+        border-bottom: solid 1px white;
+        position: absolute;
+        bottom: 0;
+        width: 0;
+        transition: all 0.2s ease;
+      }
+
+      &:hover::before {
+        width: 50%;
+      }
+
+      &::after {
+        right: 0;
+        content: '';
+        border-bottom: solid 1px white;
+        position: absolute;
+        bottom: 0;
+        width: 0;
+        transition: all 0.2s ease;
+      }
+
+      &:hover::after {
+        width: 50%;
+      }
+    }
+  }
