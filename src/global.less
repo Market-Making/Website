@@ -14,7 +14,7 @@ iframe {
 }
 
 * {
-  
+  line-height: 1.5;
   color: #fff;
 }
 
@@ -25,12 +25,19 @@ html {
   padding: 0;
   font-family: 'Karla';
 }
-h1,h4{
+h1,h3,h4{
   font-family: 'FugazOne';
 }
-p,ul {
+ul {
+  list-style-type: none; /* 移除圆点 */
+}
+p,ul,li {
   margin: 0;
   padding: 0;
+}
+a {
+  text-decoration: none; /* 移除下划线 */
+  cursor: pointer;
 }
 .flex{
   display: flex;
@@ -54,7 +61,8 @@ p,ul {
   flex:1;
 }
 .card{
-  margin: 0 110px;
+  margin: 0 auto;
+  max-width: 1044px;
   position: relative;
 }
 .btn{
@@ -92,4 +100,9 @@ p,ul {
 }
 .us{
   border: 1px solid #4B608D;
+  p{
+    font-size: 12px;
+    color: #8f9bb3;
+    
+  }
 }

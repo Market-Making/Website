@@ -17,9 +17,6 @@ export default function App() {
 	}, {
 		flag: false,
 		value: 'Building'
-	}, {
-		flag: false,
-		value: 'Thinking'
 	}]);
 	const SwiperButtonNext = ({ item, index, children }: any) => {
 		// const swiper = useSwiper();
@@ -50,17 +47,24 @@ export default function App() {
 				</div>
 
 			</div>
-			<div style={{ padding: '0 110px' }}>
+			<div className="card" style={{ padding: '0 110px' }}>
 
 				<Swiper style={{ height: '500px' }}
-					onSwiper={(swiper) => setSwiper(swiper)}>
+					onSwiper={(swiper) => setSwiper(swiper)}
+					onSlideChange={(swiper) => {
+						debugger;
+						setNavList((data) => {
+							let newData = data.map((item) => { item.flag = false; return item; });
+							return newData.map((item2, index2) => { item2.flag = (swiper.activeIndex == index2); return item2; });
+						});
+					}}
+				>
 					<SwiperSlide>
 						<div className="s1 flex">
 							<div className="f1 flex flex-a-i-c">
 								<div>
 									<h1 className="swiper-no-swiping">Passive Market Making</h1>
-									<p className="swiper-no-swiping">Hash Capital provides tight order book spreads execution capabilities through passive market making strategies.</p>
-									<p className="swiper-no-swiping">Hash Capital provides volume-building execution capabilities through positive market making strategies.</p>
+									<p className="swiper-no-swiping">Hash Capital provides tight order book spreads execution capabilities through passive market making strategies & volume-building execution capabilities through positive market making strategies.</p>
 								</div>
 							</div>
 							<div className="f1">
@@ -73,7 +77,7 @@ export default function App() {
 							<div className="f1 flex flex-a-i-c">
 								<div>
 									<h1 className="swiper-no-swiping">Proprietary Trading</h1>
-									<p className="swiper-no-swiping">Hash Capital does not represent investors or customers in the management of any digital assets or fiat currencies.</p>
+									<p className="swiper-no-swiping">For High Frequency Trading, Hash Capital can consistently process large amounts of data in the shortest time with multiple strategies from multiple venues. Hash Capital does not represent investors or customers in the management of any assets.</p>
 								</div>
 							</div>
 							<div className="f1">
@@ -85,20 +89,7 @@ export default function App() {
 						<div className="s1 flex">
 							<div className="f1 flex flex-a-i-c">
 								<div>
-									<h1 className="swiper-no-swiping">High Frequency Trading</h1>
-									<p className="swiper-no-swiping">Hash Capital can consistently process large amounts of data in the shortest time with multiple strategies from multiple venues.</p>
-								</div>
-							</div>
-							<div className="f1">
-								<img src="/3.jpg" />
-							</div>
-						</div>
-					</SwiperSlide>
-					<SwiperSlide>
-						<div className="s1 flex">
-							<div className="f1 flex flex-a-i-c">
-								<div>
-									<h1 className="swiper-no-swiping">Building</h1>
+									<h1 className="swiper-no-swiping">Web3 Building</h1>
 									<p className="swiper-no-swiping">Hash Capital is a passionate builder to foster the evolution, connection, and inspiration for blockchain and Web3.</p>
 								</div>
 							</div>
