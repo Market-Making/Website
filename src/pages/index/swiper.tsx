@@ -62,7 +62,7 @@ export default function App() {
 						<div className="s1 flex">
 							<div className="f1 flex flex-a-i-c">
 								<div>
-									<h1 className="swiper-no-swiping">Passive Market Making</h1>
+									<h1 className="swiper-no-swiping">Market Making</h1>
 									<p className="swiper-no-swiping">Hash Capital provides tight order book spreads execution capabilities through passive market making strategies & volume-building execution capabilities through positive market making strategies.</p>
 								</div>
 							</div>

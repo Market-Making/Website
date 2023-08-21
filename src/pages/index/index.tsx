@@ -51,12 +51,7 @@ export default function HomePage() {
         </div>
 
       </div>
-      <div style={{ padding: '0 110px', marginTop: '30px' }}>
 
-        <div className='flex flex-j-c-s-b'>
-          <span>©2023 BY WINTERMUTE TRADING LTD</span>
-        </div>
-      </div>
       <div className='us' style={{ margin: '30px 110px', gap: '40px', padding: '30px' }}>
         <h3>Statements</h3>
         <p>
@@ -71,8 +66,11 @@ export default function HomePage() {
 
         </p>
       </div>
-      <div>
+      <div style={{ padding: '0 110px 30px', marginTop: '30px' }}>
 
+        <div className='flex flex-j-c-f-e'>
+          <span>© 2023 Hash Capital. All Rights Reserved.</span>
+        </div>
       </div>
     </div>
   );
