@@ -52,7 +52,6 @@ export default function App() {
 				<Swiper style={{ height: '500px' }}
 					onSwiper={(swiper) => setSwiper(swiper)}
 					onSlideChange={(swiper) => {
-						debugger;
 						setNavList((data) => {
 							let newData = data.map((item) => { item.flag = false; return item; });
 							return newData.map((item2, index2) => { item2.flag = (swiper.activeIndex == index2); return item2; });
