@@ -7,4 +7,5 @@ export default defineConfig({
     { path: "/", component: "index" }
   ],
   npmClient: 'yarn',
+  title: 'Hash Capital',
 });
