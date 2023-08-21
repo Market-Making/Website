@@ -47,7 +47,7 @@ export default function HomePage() {
             Anthea Bradley
             </a></li>
             <li>
-              <a target='_blank' href='https://t.me/Frank_lin007'>Franklin Hunter</a>
+              <a target='_blank' href='https://t.me/Franklin_Hunter'>Franklin Hunter</a>
             </li>
             <li>
               <a target='_blank' href='https://t.me/Carina8899'>
