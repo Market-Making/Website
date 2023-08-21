@@ -69,7 +69,8 @@ export default function HomePage() {
       <div style={{ padding: '0 110px 30px', marginTop: '30px' }}>
 
         <div className='flex flex-j-c-f-e'>
-          <span>© 2023 Hash Capital. All Rights Reserved.</span>
+          <span style={{ fontSize: '12px',
+    color: '#8f9bb3'}}>© 2023 Hash Capital. All Rights Reserved.</span>
         </div>
       </div>
     </div>
