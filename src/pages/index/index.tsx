@@ -8,7 +8,7 @@ export default function HomePage() {
       </div>
       {/*  */}
       <div className='flex sol card'>
-        <div className='f1'>
+        <div className='f1' style={{zIndex:1}}>
           <div className='left flex flex-d-c flex-j-c-c'>
             <p className='title' style={{ fontFamily: 'FugazOne' }}>Hash Capital</p>
             <p style={{ marginTop: '30px' }}>Hash Capital is a leading market marker, algorithmic trader, and proprietary player in digital assets.

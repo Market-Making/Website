@@ -40,7 +40,8 @@ ul {
 
 p,
 ul,
-li,a {
+li,
+a {
   margin: 0;
   padding: 0;
 }
@@ -139,6 +140,10 @@ a {
   .us {
     margin: 30px !important;
   }
+
+  .ft {
+    margin: 30px;
+  }
 }
 
 @media (max-width: 1044px) {
@@ -154,15 +159,29 @@ a {
 
 @media (max-width: 650px) {
   .hidden {
-    display: none;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+  }
+  .swiperse{
+    align-items: self-end;
+  }
+  .swiper{
+    padding-top: 30px;
+  }
+  .s1 {
+    img {
+      right: unset !important;
+      width: 100% !important;
+      height: unset !important;
+    }
   }
 
   .logo {
     padding: 30px;
   }
-  .sol {
-    height: 400px !important;
-  }
+
   .btn {
     padding: 0 20px;
   }

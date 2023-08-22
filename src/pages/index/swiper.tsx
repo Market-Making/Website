@@ -60,7 +60,7 @@ export default function App() {
 				>
 					<SwiperSlide>
 						<div className="s1 flex">
-							<div className="f1 flex flex-a-i-c">
+							<div className="f1 flex flex-a-i-c swiperse" style={{zIndex:1}}>
 								<div>
 									<h1 className="swiper-no-swiping">Market Making</h1>
 									<p className="swiper-no-swiping">Hash Capital provides tight order book spreads execution capabilities through passive market making strategies & volume-building execution capabilities through positive market making strategies.</p>
@@ -73,7 +73,7 @@ export default function App() {
 					</SwiperSlide>
 					<SwiperSlide>
 						<div className="s1 flex">
-							<div className="f1 flex flex-a-i-c">
+							<div className="f1 flex flex-a-i-c swiperse" style={{zIndex:1}}>
 								<div>
 									<h1 className="swiper-no-swiping">Proprietary Trading</h1>
 									<p className="swiper-no-swiping">For High Frequency Trading, Hash Capital can consistently process large amounts of data in the shortest time with multiple strategies from multiple venues. Hash Capital does not represent investors or customers in the management of any assets.</p>
@@ -86,7 +86,7 @@ export default function App() {
 					</SwiperSlide>
 					<SwiperSlide>
 						<div className="s1 flex">
-							<div className="f1 flex flex-a-i-c">
+							<div className="f1 flex flex-a-i-c swiperse" style={{zIndex:1}}>
 								<div>
 									<h1 className="swiper-no-swiping">Web3 Building</h1>
 									<p className="swiper-no-swiping">Hash Capital is a passionate builder to foster the evolution, connection, and inspiration for blockchain and Web3.</p>
