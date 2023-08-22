@@ -2,6 +2,7 @@
   font-family: 'FugazOne';
   src: url('/FugazOne-Regular.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'Karla';
   src: url('/Karla-Medium.ttf') format('truetype');
@@ -25,84 +26,152 @@ html {
   padding: 0;
   font-family: 'Karla';
 }
-h1,h3,h4{
+
+h1,
+h3,
+h4 {
   font-family: 'FugazOne';
 }
+
 ul {
-  list-style-type: none; /* 移除圆点 */
+  list-style-type: none;
+  /* 移除圆点 */
 }
-p,ul,li {
+
+p,
+ul,
+li,a {
   margin: 0;
   padding: 0;
 }
+
 a {
-  text-decoration: none; /* 移除下划线 */
+  text-decoration: none;
+  /* 移除下划线 */
   cursor: pointer;
+
 }
-.flex{
+
+.flex {
   display: flex;
 }
-.flex-j-c-c{
+
+.flex-j-c-c {
   justify-content: center;
 }
-.flex-a-i-c{
+
+.flex-a-i-c {
   align-items: center;
 }
-.flex-j-c-s-b{
+
+.flex-j-c-s-b {
   justify-content: space-between;
 }
-.flex-j-c-f-e{
+
+.flex-j-c-f-e {
   justify-content: flex-end;
 }
-.flex-d-c{
+
+.flex-d-c {
   flex-direction: column;
 }
-.f1{
-  flex:1;
+
+.f1 {
+  flex: 1;
 }
-.card{
+
+.card {
   margin: 0 auto;
   max-width: 1044px;
   position: relative;
 }
-.btn{
+
+.btn {
   display: inline-flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    outline: 0px;
-    margin: 0px;
-    cursor: pointer;
-    user-select: none;
-    vertical-align: middle;
-    appearance: none;
-    text-decoration: none;
-    font-family: Poppins, Helvetica, Arial;
-    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    line-height: 1;
-    font-weight: 600;
-    color: rgb(255, 255, 255);
-    text-transform: none;
-    padding: 0px 32px;
-    min-width: initial;
-    // background: rgb(9, 26, 61);
-    border: 1px solid rgb(75, 96, 141);
-    border-radius: 0px;
-    height: 46px;
-    position: relative;
-    font-size: 15px;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  outline: 0px;
+  margin: 0px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
+  font-family: Poppins, Helvetica, Arial;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  line-height: 1;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  text-transform: none;
+  padding: 0px 32px;
+  min-width: initial;
+  // background: rgb(9, 26, 61);
+  border: 1px solid rgb(75, 96, 141);
+  border-radius: 0px;
+  height: 46px;
+  position: relative;
+  font-size: 15px;
 }
-.btn_active{
+
+.btn_active {
   background: #091a3d;
 }
-.us{
+
+.us {
   border: 1px solid #4B608D;
-  p{
+
+  p {
     font-size: 12px;
     color: #8f9bb3;
-    
+
+  }
+}
+
+.ft {
+  margin: 30px 110px;
+}
+
+@media (max-width: 1344px) {
+  .us {
+    margin: 30px !important;
+  }
+}
+
+@media (max-width: 1044px) {
+  .card {
+    padding: 0 30px;
+  }
+
+
+  .ft {
+    margin: 30px;
+  }
+}
+
+@media (max-width: 650px) {
+  .hidden {
+    display: none;
+  }
+
+  .logo {
+    padding: 30px;
+  }
+  .sol {
+    height: 400px !important;
+  }
+  .btn {
+    padding: 0 20px;
+  }
+
+  .fli {
+    flex-direction: column;
+
+    ul {
+      margin: 15px 0;
+    }
   }
 }

@@ -3,7 +3,7 @@ import Swiper from "./swiper";
 export default function HomePage() {
   return (
     <div>
-      <div style={{ padding: '30px 80px' }}>
+      <div className='logo'>
         <img width={110} src="/logo.svg" />
       </div>
       {/*  */}
@@ -19,7 +19,7 @@ export default function HomePage() {
           </div>
 
         </div>
-        <div className='f1'>
+        <div className='f1 hidden'>
           <iframe src="/plan4/index.html"></iframe>
         </div>
       </div>
@@ -27,7 +27,7 @@ export default function HomePage() {
 
       <div className='us' style={{ margin: '0 110px', marginTop: '30px', gap: '40px', padding: '30px' }}>
         <h3>Connections</h3>
-        <div className='flex flex-j-c-s-b' >
+        <div className='flex flex-j-c-s-b fli' >
           <ul className='nav2'>
             <li><a target='_blank' href='https://twitter.com/capital_hash'>
               Twitter
@@ -80,7 +80,7 @@ export default function HomePage() {
 
         </p>
       </div>
-      <div style={{ padding: '0 110px 30px', marginTop: '30px' }}>
+      <div className='ft'>
 
         <div className='flex flex-j-c-f-e'>
           <span style={{ fontSize: '12px',

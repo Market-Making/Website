@@ -47,7 +47,7 @@ export default function App() {
 				</div>
 
 			</div>
-			<div className="card" style={{ padding: '0 110px' }}>
+			<div className="card">
 
 				<Swiper style={{ height: '500px' }}
 					onSwiper={(swiper) => setSwiper(swiper)}
@@ -66,7 +66,7 @@ export default function App() {
 									<p className="swiper-no-swiping">Hash Capital provides tight order book spreads execution capabilities through passive market making strategies & volume-building execution capabilities through positive market making strategies.</p>
 								</div>
 							</div>
-							<div className="f1">
+							<div className="f1 hidden">
 								<img src="/1.jpg" />
 							</div>
 						</div>
@@ -79,7 +79,7 @@ export default function App() {
 									<p className="swiper-no-swiping">For High Frequency Trading, Hash Capital can consistently process large amounts of data in the shortest time with multiple strategies from multiple venues. Hash Capital does not represent investors or customers in the management of any assets.</p>
 								</div>
 							</div>
-							<div className="f1">
+							<div className="f1 hidden">
 								<img src="/2.jpg" />
 							</div>
 						</div>
@@ -92,8 +92,8 @@ export default function App() {
 									<p className="swiper-no-swiping">Hash Capital is a passionate builder to foster the evolution, connection, and inspiration for blockchain and Web3.</p>
 								</div>
 							</div>
-							<div className="f1">
-								<img src="/4.jpg" />
+							<div className="f1 hidden">
+								<img src="/3.jpg" />
 							</div>
 						</div>
 					</SwiperSlide>
