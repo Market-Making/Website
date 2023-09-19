@@ -1,0 +1,47 @@
+.warp {
+  border-bottom: 1px solid rgb(37, 41, 48);
+  // background: #0e1118;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.segmented {
+  :global {
+    .ant-segmented {
+      color: white;
+    }
+
+    .ant-segmented-item-selected {
+      color: white;
+      background: #0030d4;
+    }
+
+    .ant-segmented:not(.ant-segmented-disabled):hover,
+    .ant-segmented:not(.ant-segmented-disabled):focus {
+      color: white;
+      background: transparent;
+    }
+
+    .ant-segmented-thumb {
+      color: white;
+      background: #0030d4;
+    }
+
+    .ant-segmented-item:hover,
+    .ant-segmented-item:focus {
+      color: white;
+    }
+  }
+}
+
+.menuItem {
+  color: #b6b6b5;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover{
+    color: white
+  }
+}

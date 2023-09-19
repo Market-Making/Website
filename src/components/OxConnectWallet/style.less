@@ -1,0 +1,477 @@
+.connect{
+  // display: inline-block;
+  // padding:0 11px;
+  .wrap{
+    display: inline-block;
+    color: #b5b5b6;
+    // padding-left: 22px;
+    // background: #2A2E34;
+    border-radius: 20px;
+    line-height: 30px;
+    .coin{
+      font-size: 14px;
+      font-family: PingFang SC;
+      font-weight: 400;
+      color: #b5b5b6;
+    }
+    
+  }
+  .balanceBtn{
+    display: inline-block;
+    color: #b5b5b6;
+    background: #2A2E34;
+    //border-radius: 20px;
+    line-height: 30px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    .showBalance{
+      display: inline-block;
+      //padding-left: 5px;
+    }
+  }
+  .pending{
+    background-color: #eb5c20;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 20px;
+    margin-left: 11px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 30px;
+    line-height: 30px;
+  }
+  .address{
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    padding: 5px 30px;
+    line-height: 30px;
+    margin-left: 11px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+}
+
+.header {
+  padding: 0;
+  position: relative;
+}
+
+.logo {
+  vertical-align: top;
+  display: inline-block;
+  padding: 0 0 0 24px;
+  cursor: pointer;
+  font-size: 20px;
+  img {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+.menu {
+  :global(.anticon) {
+    margin-right: 8px;
+  }
+  :global(.ant-dropdown-menu-item) {
+    min-width: 160px;
+  }
+}
+
+.trigger {
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s, padding 0s;
+}
+
+.right {
+  // float: right;
+  height: 100%;
+  // overflow: hidden;
+  margin-right: 10px;
+  .action {
+    cursor: pointer;
+    padding: 0 12px;
+    display: inline-block;
+    transition: all 0.3s;
+    height: 100%;
+    > i {
+      vertical-align: middle;
+    }
+    &:hover {
+    }
+    &:global(.opened) {
+    }
+  }
+  .search {
+    padding: 0 12px;
+    &:hover {
+      background: transparent;
+    }
+  }
+  .account {
+    .avatar {
+      margin-right: 8px;
+      background: rgba(255, 255, 255, 0.85);
+      vertical-align: top;
+    }
+  }
+}
+
+.dark {
+  .action {
+    color: rgba(255, 255, 255, 0.85);
+    > i {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    &:hover,
+    &:global(.opened) {
+    }
+    :global(.ant-badge) {
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+}
+.walltitle {
+  
+  //font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #b5b5b6;
+  display: flex;
+  align-items: center;
+}
+.showmore {
+  text-align: center;
+  cursor: pointer;
+  color: #929298;
+  &:hover {
+    color: #b5b5b6;
+  }
+}
+.metamasktitle {
+  color: #ed6c36;
+  font-weight: bold;
+  font-size: 30px;
+  padding-left: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+.coin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30px;
+  font-weight: bold;
+  color: #b5b5b6;
+  .coinname {
+  }
+  .coinprice {
+    .dollar {
+      font-size: 24px;
+      font-weight: 400;
+      color: #b5b6b6;
+    }
+  }
+}
+.buyCrypto {
+  padding: 15px 50px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #b5b6b6;
+}
+.transak {
+  width: 50%;
+  display: flex;
+  margin: 0 50px;
+  padding: 15px 15px;
+  border: 2px solid #ed6c36;
+  border-radius: 20px;
+  font-size: 30px;
+  font-weight: 600;
+  color: #b5b6b6;
+}
+.clear {
+  margin: 32px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 400;
+  color: #b5b6b6;
+  .subtitle {
+    
+  }
+}
+
+.recentTransaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.setting {
+  width: 300px;
+  padding: 10px;
+  background: #2a2a2d;
+  border: 1px solid #707070;
+  border-radius: 10px 3px 10px 10px;
+  font-size: 14px;
+  color: #b5b6b6;
+  .list {
+    .listitem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .setitem{
+      padding: 12px 20px;
+      color: rgb(133, 133, 141);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 22px;
+      display: flex;
+      align-items: center;
+      svg{
+        margin-right: 12px;
+    
+      }
+      &:hover{
+        background-color: rgba(255, 255, 255, 0.1);
+        color: rgb(133, 133, 141);
+        text-decoration: none;
+      }
+    }
+  }
+  .message {
+    margin-top: 22px;
+    padding: 22px 13px;
+    background: #373739;
+    border-radius: 10px;
+  }
+}
+
+.descLine{
+  display:flex;
+  justify-content: space-between;
+}
+
+// 网络切换部分css
+.networkListBlock{
+  background: black;
+  border: 0.75px solid #333333;
+  //width: 50%;
+  width: 180px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.networkListLayout{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    margin: 2px auto;
+    margin-bottom: 8px;
+    margin-top: -5px;
+    font-size: 14px;
+    padding: 1px;
+    border:0.75px solid #333333;
+    background: black;
+    border-radius: 5px;
+    font-weight: bold;
+    justify-content: center;
+    &:hover{
+      border:1px solid #e29227;
+      border-radius: 5px;
+      transform: all 0.2;
+      cursor: pointer;
+    }
+  }
+  .networkListLayout_selected{
+    width: 100%;
+    height: 45px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    margin: 2px auto;
+    margin-bottom: 8px;
+    margin-top: -5px;
+    font-size: 14px;
+    border:1px solid #A34520;
+    background: black;
+    border-radius: 5px;
+    font-weight: bold;
+    &:hover{
+      border:1px solid #e29227;
+      border-radius: 5px;
+      transform: all 0.2;
+      cursor: pointer;
+    }
+  }
+  .networkListLayout_selectedCheck{
+    position: absolute;
+    bottom: -4px;
+    right: 0;
+  }
+  .networkListLayoutColumn{
+    width: 90%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    margin: 2px auto;
+    margin-bottom: 8px;
+    margin-top: -5px;
+    font-size: 14px;
+    padding: 1px;
+    border:0.75px solid #333333;
+    background: black;
+    border-radius: 5px;
+    font-weight: bold;
+    justify-content: center;
+    &:hover{
+      border:1px solid #e29227;
+      border-radius: 5px;
+      transform: all 0.2;
+      cursor: pointer;
+    }
+  }
+  .walletList{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    margin: 2px auto;
+    margin-bottom: 8px;
+    margin-top: -5px;
+    font-size: 12px;
+    padding: 1px;
+    border: 0.75px solid #333333;
+    background: black;
+    border-radius: 5px;
+    font-weight: bold;
+    justify-content: center;
+    &:hover{
+      border:1px solid #e29227;
+      transform: all 0.2;
+      cursor: pointer;
+    }
+  }
+
+  .networkButton{
+    // background: #2A2E34;
+    // color: #EB5C20;
+    display: inline-block;
+    padding:0 15px;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    line-height: 30px;
+    vertical-align: middle;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+  }
+  .networkTitle {
+    
+    //font-weight: bold;
+    color: #b5b5b6;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-left: 1px;
+    margin-top: -5px;
+    margin-bottom: 2px;
+  }
+  .fontBold{
+    font-weight:bold;
+  }
+  .disconnectBtn{
+    background: #181a1e;
+    color: rgb(236, 61, 61);
+    font-size: large;
+    text-align: center;
+    padding: 15px;
+    border: 2px solid #A34520;
+    border-radius: 10px;
+    vertical-align: middle;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    &:hover{
+      border:2px solid #e29227;
+      cursor: pointer;
+    }
+  }
+
+  .acycardlist{
+    .acl_title{
+      
+      line-height: 20px;
+      font-weight: 400;
+      color: #929298;
+    }
+    .acl_list{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .acl_list_grid{
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(2, 1fr);
+      justify-content: center;
+    }
+  }
+  .thin{
+    width: 45%;
+    display: flex;
+    align-items: center;
+    margin: 10px auto;
+    font-size: 14px;
+    padding: 5px;
+    border:1px solid transparent;
+    border-radius: 5px;
+    &:hover{
+      border:1px solid #e29227;
+      border-radius: 55px;
+      transform: all 0.2;
+      cursor: pointer;
+    }
+  }
+  .fat{
+    text-align: center;
+    font-size: 20px;
+    display: inline-block;
+    padding: 18px 22px 6px;
+    background: #2F3033;
+    border-radius: 15px;
+  }
+  .agree{
+    width: 100%;
+    padding: 10px;
+    background: #373739;
+    font-size: 12px;
+    color: #b5b5b6;
+    border-radius: 5px;
+    strong{
+      color: #EB5C20;
+    }
+  }

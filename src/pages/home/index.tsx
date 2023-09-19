@@ -1,12 +1,9 @@
+import React from 'react';
 import './index.less';
 import Swiper from "./swiper";
 export default function HomePage() {
   return (
     <div>
-      <div className='logo'>
-        <img width={110} src="/logo.svg" />
-      </div>
-      {/*  */}
       <div className='flex sol card'>
         <div className='f1' style={{zIndex:1}}>
           <div className='left flex flex-d-c flex-j-c-c'>

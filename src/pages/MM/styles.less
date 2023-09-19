@@ -1,0 +1,145 @@
+.nobgTable {
+  padding: 10;
+  border: 1px solid #333333;
+  border-radius: 8px;
+
+  :global {
+    .ant-table-placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .ant-table-thead>tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td,
+    .ant-table-tbody>tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td,
+    .ant-table-thead>tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td,
+    .ant-table-tbody>tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td {
+      background: black !important;
+      color: rgba(255, 255, 255, 0.7);
+      // cursor: pointer;
+    }
+
+    .ant-table-thead>tr {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .ant-table-tbody>tr {
+      background: black !important;
+      color: rgba(255, 255, 255, 0.7);
+
+      &:hover {
+        background: black !important;
+      }
+    }
+
+    .ant-table-tbody>tr>td {
+      border-bottom: none !important;
+    }
+
+    .ant-table-thead>tr>th {
+      text-align: left !important;
+      background: black !important;
+      border-bottom: 1px solid #333333;
+      color: rgba(255, 255, 255, 0.7);
+      &:before {
+        background-color: black !important;
+      }
+    }
+
+    .ant-table-footer {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .ant-table-tbody>tr {
+      &:active {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+}
+
+.myModal {
+  :global {
+    .ant-modal-body {
+      min-height: 40rem !important;
+      border-radius: 5px;
+      background-color: black;
+    }
+
+    .ant-modal-content {
+      min-height: 40rem !important;
+      background-color: black;
+      border: 1px solid #333333;
+      padding: 30px;
+    }
+
+    .ant-modal-close {
+      color: #b6b6b5 !important;
+    }
+  }
+}
+
+.mySelect {
+  :global {
+    .ant-select-selector {
+      height: 40px !important;
+      background: transparent !important;
+      border: 1px solid #333333 !important;
+      align-items: center;
+      color: white;
+    }
+
+    .ant-select-arrow {
+      color: white;
+    }
+  }
+}
+
+.dropDownMenu {
+  font-family: "Karla", sans-serif;
+  background-color: black;
+  text-align: center;
+}
+
+.dropDownMenu:focus {
+  font-family: "Karla", sans-serif;
+  background-color: black;
+  text-align: center;
+  border-color: black;
+}
+
+.optionItem {
+  background-color: black !important;
+  font-family: "Karla", sans-serif;
+  font-size: 13px;
+  font-weight: 100;
+  height: 2.4rem;
+  display: flex;
+  text-align: left;
+
+  &:hover {
+    background-color: #323232 !important;
+  }
+}
+
+.confirmButton {
+  background: #0030d4;
+  width: 290px;
+  height: 3rem;
+  font-size: 1.1rem;
+  border: 1px solid #232323;
+  margin-top: 2rem;
+  margin-left: 20%;
+
+  &:hover {
+    background: #0030d4;
+    color: white;
+  }
+}
+
+.saveButton {
+  background: black;
+  border: 1px solid #333333;
+  width: 80px;
+  &:hover{
+    background-color: #232323;
+  }
+}
