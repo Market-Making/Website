@@ -17,4 +17,5 @@ export default defineConfig({
   }],
   npmClient: 'yarn',
   title: 'Hash Capital',
+  esbuildMinifyIIFE: true,
 });
