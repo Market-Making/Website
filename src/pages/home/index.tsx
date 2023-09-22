@@ -51,7 +51,12 @@ export default function HomePage() {
               Carina Loyal
               </a>
             </li>
-
+            <li>
+              <a target='_blank' href='https://t.me/tribel223'>Tribel Edison</a>
+            </li>
+            <li>
+              <a target='_blank' href='https://t.me/Belle_pe'>Belle Page</a>
+            </li>
           </ul>
           <ul>
 
