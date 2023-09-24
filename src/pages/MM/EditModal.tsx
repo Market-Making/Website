@@ -9,7 +9,7 @@ const EditModal = (props: any) => {
     setShowModal,
     row,
     setRow,
-    edit,
+    save,
   } = props
 
   return (
@@ -44,7 +44,7 @@ const EditModal = (props: any) => {
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Grid</div>
             <Input
               value={row?.buygrid}
-              onChange={(e: any) => { setRow({ ...row, buygrid: e.target.value, sellgrid: e.target.value }) }}
+              onChange={(e: any) => { setRow({ ...row, buygrid: parseFloat(e.target.value), sellgrid: parseFloat(e.target.value) }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
           </Form.Item>}
@@ -53,7 +53,7 @@ const EditModal = (props: any) => {
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Order Number</div>
             <Input
               value={row?.BuyOrderNum}
-              onChange={(e: any) => { setRow({ ...row, BuyOrderNum: e.target.value, SellOrderNum: e.target.value }) }}
+              onChange={(e: any) => { setRow({ ...row, BuyOrderNum: parseFloat(e.target.value), SellOrderNum: parseFloat(e.target.value) }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
           </Form.Item>}
@@ -62,7 +62,7 @@ const EditModal = (props: any) => {
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Buy Ratio</div>
             <Input
               value={row?.buyratio}
-              onChange={(e: any) => { setRow({ ...row, buyratio: e.target.value }) }}
+              onChange={(e: any) => { setRow({ ...row, buyratio: parseFloat(e.target.value) }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
           </Form.Item>}
@@ -71,7 +71,7 @@ const EditModal = (props: any) => {
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Sell Ratio</div>
             <Input
               value={row?.sellratio}
-              onChange={(e: any) => { setRow({ ...row, sellratio: e.target.value }) }}
+              onChange={(e: any) => { setRow({ ...row, sellratio: parseFloat(e.target.value) }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
           </Form.Item>}
@@ -79,7 +79,7 @@ const EditModal = (props: any) => {
           <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Upper Boundary</div>
           <Input
             value={row?.UpperBound}
-            onChange={(e: any) => { setRow({ ...row, UpperBound: e.target.value }) }}
+            onChange={(e: any) => { setRow({ ...row, UpperBound: parseFloat(e.target.value) }) }}
             style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
           />
         </Form.Item>
@@ -87,7 +87,7 @@ const EditModal = (props: any) => {
           <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Lower Boundary</div>
           <Input
             value={row?.LowerBound}
-            onChange={(e: any) => { setRow({ ...row, LowerBound: e.target.value }) }}
+            onChange={(e: any) => { setRow({ ...row, LowerBound: parseFloat(e.target.value) }) }}
             style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
           />
         </Form.Item>
@@ -96,7 +96,7 @@ const EditModal = (props: any) => {
           <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Order Amount</div>
           <Input
             value={row?.OrderAmount}
-            onChange={(e: any) => { setRow({ ...row, OrderAmount: e.target.value }) }}
+            onChange={(e: any) => { setRow({ ...row, OrderAmount: parseFloat(e.target.value) }) }}
             style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
           />
         </Form.Item>
@@ -105,7 +105,7 @@ const EditModal = (props: any) => {
       <Button
         className={styles.confirmButton}
         onClick={() => {
-          edit(row)
+          save(row)
           setShowModal(false)
         }}
       >
