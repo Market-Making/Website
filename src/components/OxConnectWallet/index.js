@@ -53,10 +53,9 @@ const OxConnectWallet = props => {
     const connectWalletOnPageLoad = async () => {
       if (localStorage?.getItem("login_status") === "on") {
         try {
-          await activate(injected)
+          activate(injected)
         } catch (e) {
           message.info('No provider was found');
-          localStorage.setItem("login_status", "off");
         }
       }
     }
