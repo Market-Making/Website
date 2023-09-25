@@ -22,9 +22,6 @@ const OxConnectWallet = props => {
       activate(injected);
     } catch (error) {
       message.info('No provider was found');
-      if (account) {
-        localStorage.setItem("login_status", "on");
-      }
       return
     }
   };
@@ -40,6 +37,12 @@ const OxConnectWallet = props => {
       return text;
     }
   }
+
+  useEffect(()=>{
+    if (account) {
+      localStorage.setItem("login_status", "on");
+    }
+  }, [account])
 
   useEffect(() => {
     if (window.ethereum) {
@@ -57,8 +60,6 @@ const OxConnectWallet = props => {
     }
     connectWalletOnPageLoad()
   }, [])
-
-  console.log('joy', localStorage.getItem('login_status'), account)
 
   return (
     <div className={styles.right}>
