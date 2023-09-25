@@ -7,29 +7,11 @@ import styles from './styles.less'
 
 const MM = (props: any) => {
 
-  const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
-  const [configs, setConfigs] = useState()
   const [strategies, setStrategies] = useState([])
   const [selectedRow, setSelectedRow] = useState()
   const [activeStrategy, setActiveStrategy] = useState('Bitmart')
-
-  const edit = (row: any) => {
-    const list = strategies.map(e => {
-      if (row.name != 'Maker' && e.name != 'Maker') {
-        e.buyratio = row.buyratio
-        e.sellratio = row.sellratio
-        e.UpperBound = row.UpperBound
-        e.LowerBound = row.LowerBound
-      }
-      if (e.name == row.name) {
-        return row
-      }
-      return e
-    })
-    setStrategies(list)
-    save(row)
-  }
+  const [activeCoin, setActiveCoin] = useState('QH')
 
   const save = async (row: any) => {
     let newConfig
@@ -59,7 +41,7 @@ const MM = (props: any) => {
     const data = await updateConfigData({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER',
+      coin_name: activeCoin,
       body: newConfig,
     })
     if (data) {
@@ -71,7 +53,7 @@ const MM = (props: any) => {
     const data = await stopBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER',
+      coin_name: activeCoin,
       bot_type: name.toLowerCase().replace('1', '_1').replace('2', '_2').replace('3', '_3')
     })
     if (data) {
@@ -92,10 +74,9 @@ const MM = (props: any) => {
   }
 
   const getBotStatus = async () => {
-    const data = await getStatus({key:1234})
-    if(data) {
-      const coin_name = activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER'
-      return data[activeStrategy.toLowerCase()][coin_name]
+    const data = await getStatus({ key: 1234 })
+    if (data) {
+      return data[activeStrategy.toLowerCase()][activeCoin]
     }
   }
 
@@ -103,9 +84,9 @@ const MM = (props: any) => {
     const data = await getConfigData({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER',
+      coin_name: activeCoin
     })
-    if (data) {
+    if (data.Maker) {
       const status = await getBotStatus()
       const list = [
         {
@@ -152,14 +133,18 @@ const MM = (props: any) => {
           running: status?.taker_3 == 'Running',
         })
       }
-      setConfigs(data)
       setStrategies(list)
     }
   }
 
   useEffect(() => {
     getConfig()
+    activeStrategy == 'Bitmart' ? setActiveCoin('QH') : setActiveCoin('HUNTER')
   }, [activeStrategy])
+
+  useEffect(()=>{
+    getConfig()
+  }, [activeCoin])
 
   return (
     <div>
@@ -180,6 +165,16 @@ const MM = (props: any) => {
             </h3>
           </div>
         </div>
+        {activeStrategy == 'Digifinex' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
+          {['HUNTER', 'LUK', 'MAKA'].map(coin => {
+            return <span
+              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
+              onClick={() => { setActiveCoin(coin) }}
+            >
+              {coin}
+            </span>
+            })}
+        </div>}
       </div>
       <div style={{ padding: '10px 250px' }}>
         <Table
