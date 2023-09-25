@@ -18,7 +18,7 @@ const OxConnectWallet = props => {
 
   const selectWallet = () => {
     try {
-      ethereum;
+      // ethereum;
       activate(injected);
     } catch (error) {
       message.info('No provider was found');
@@ -47,6 +47,20 @@ const OxConnectWallet = props => {
         document.location.reload();
       })
     }
+  }, [])
+
+  useEffect(() => {
+    const connectWalletOnPageLoad = async () => {
+      if (localStorage?.getItem("login_status") === "on") {
+        try {
+          await activate(injected)
+        } catch (e) {
+          message.info('No provider was found');
+          localStorage.setItem("login_status", "off");
+        }
+      }
+    }
+    connectWalletOnPageLoad()
   }, [])
 
   return (

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import { Table, Button, Tag, Space, message } from 'antd'
 import { PauseOutlined, CaretRightOutlined, EditOutlined } from '@ant-design/icons'
 import { getConfigData, startBot, stopBot, getStatus, updateConfigData } from '@/utils/apis'
@@ -158,8 +157,8 @@ const MM = (props: any) => {
     }
   }
 
-  useEffect(async () => {
-    await getConfig()
+  useEffect(() => {
+    getConfig()
   }, [activeStrategy])
 
   return (
@@ -274,7 +273,7 @@ const MM = (props: any) => {
                   <>
                     {entry.running
                       ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
-                      : <Tag color='red' style={{ background: 'transparent' }}>PAUSED</Tag>
+                      : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
                     }
                   </>
                 )
