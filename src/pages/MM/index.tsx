@@ -100,7 +100,9 @@ const MM = (props: any) => {
           LowerBound: data.MakerLowerBound,
           running: status?.maker == 'Running',
         },
-        {
+      ]
+      if(data.Taker1) {
+        list.push({
           name: 'Taker1',
           ref_pair: data.Taker1.refPair,
           OrderAmount: data.Taker1.OrderAmount,
@@ -109,8 +111,10 @@ const MM = (props: any) => {
           UpperBound: data.UpperBound,
           LowerBound: data.LowerBound,
           running: status?.taker_1 == 'Running',
-        },
-        {
+        })
+      }
+      if(data.Taker2) {
+        list.push({
           name: 'Taker2',
           ref_pair: data.Taker2.refPair,
           OrderAmount: data.Taker2.OrderAmount,
@@ -119,8 +123,8 @@ const MM = (props: any) => {
           UpperBound: data.UpperBound,
           LowerBound: data.LowerBound,
           running: status?.taker_2 == 'Running',
-        }
-      ]
+        })
+      }
       if (data.Taker3) {
         list.push({
           name: 'Taker3',
@@ -139,7 +143,7 @@ const MM = (props: any) => {
 
   useEffect(() => {
     getConfig()
-    activeStrategy == 'Bitmart' ? setActiveCoin('QH') : setActiveCoin('HUNTER')
+    activeStrategy == 'Bitmart' ? setActiveCoin('QH') : activeStrategy == 'Toobit' ? setActiveCoin('MAKA') : setActiveCoin('HUNTER')
   }, [activeStrategy])
 
   useEffect(()=>{
@@ -162,6 +166,12 @@ const MM = (props: any) => {
               onClick={() => setActiveStrategy("Digifinex")}
             >
               Digifinex
+            </h3>
+            <h3
+              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'Toobit' ? 'white' : '#ffffffb3' }}
+              onClick={() => setActiveStrategy("Toobit")}
+            >
+              Toobit
             </h3>
           </div>
         </div>
