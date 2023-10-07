@@ -1,193 +1,154 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import { Table, Button, Tag, Space, message } from 'antd'
 import { PauseOutlined, CaretRightOutlined, EditOutlined } from '@ant-design/icons'
-import AddModal from './AddModal'
+import { getConfigData, startBot, stopBot, getStatus, updateConfigData } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
 
-async function get_data(path: string, params: Object) {
-  const basePath = 'http://147.182.251.92:3001/'
-  const paramArr = []
-  JSON.stringify(params).split(',').map(e => {
-    paramArr.push(e.split(':')[0].replaceAll('"', '').replaceAll('{', '') + '=' + e.split(':')[1].replaceAll('"', '').replaceAll('}', ''))
-  })
-  const config = {
-    method: 'get',
-    url: basePath + path + '?' + paramArr.join('&'),
-    headers: {
-      'Accept': '*/*',
-      'Host': '147.182.251.92:3001',
-      'Connection': 'keep-alive',
-    },
-  }
-  const data = await axios(config)
-    .then(function (response) {
-      return response.data;
-    }).catch(function (error) {
-      console.log(error);
-    });
-  return data
-}
-
 const MM = (props: any) => {
 
-  const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
-  const [configs, setConfigs] = useState()
   const [strategies, setStrategies] = useState([])
   const [selectedRow, setSelectedRow] = useState()
   const [activeStrategy, setActiveStrategy] = useState('Bitmart')
+  const [activeCoin, setActiveCoin] = useState('QH')
 
-  const edit = (row: any) => {
-    const list = strategies.map(e => {
-      if (row.name != 'Maker' && e.name != 'Maker') {
-        e.buyratio = row.buyratio
-        e.sellratio = row.sellratio
-        e.UpperBound = row.UpperBound
-        e.LowerBound = row.LowerBound
+  const save = async (row: any) => {
+    let newConfig
+    if (row.name == 'Maker') {
+      newConfig = {
+        "MakerUpperBound": row.UpperBound,
+        "MakerLowerBound": row.LowerBound,
+        "Maker": {
+          "BuyGrid": row.buygrid,
+          "SellGrid": row.sellgrid,
+          "BuyOrderNum": row.BuyOrderNum,
+          "SellOrderNum": row.SellOrderNum,
+          "OrderAmount": row.OrderAmount
+        }
       }
-      if (e.name == row.name) {
-        return row
+    } else {
+      newConfig = {
+        "UpperBound": row.UpperBound,
+        "LowerBound": row.LowerBound,
+        "BuyAmountRatio": row.buyratio,
+        "SellAmountRatio": row.sellratio,
       }
-      return e
-    })
-    setStrategies(list)
-  }
-
-  const save = (name:string) => {
-    if(name == 'Maker') {
-
+      newConfig[row.name] = {
+        "OrderAmount": row.OrderAmount
+      }
     }
-    // const newConfig = {
-    //   "BaseCoin": configs.BaseCoin,
-    //   "QuoteCoin": configs.QuoteCoin,
-    //   "Pair": configs.Pair,
-    //   "UpperBound": parseFloat(strategies[1].UpperBound),
-    //   "LowerBound": parseFloat(strategies[1].LowerBound),
-    //   "MakerUpperBound": parseFloat(strategies[0].UpperBound),
-    //   "MakerLowerBound": parseFloat(strategies[0].LowerBound),
-    //   "BalUpperBound": configs.BalUpperBound,
-    //   "BalLowerBound": configs.BalLowerBound,
-    //   "BuyAmountRatio": parseFloat(strategies[1].buyratio),
-    //   "SellAmountRatio": parseFloat(strategies[1].sellratio),
-    //   "Maker": {
-    //     "BuyGrid": parseFloat(strategies[0].buygrid),
-    //     "SellGrid": parseFloat(strategies[0].sellgrid),
-    //     "BuyOrderNum": parseFloat(strategies[0].BuyOrderNum),
-    //     "SellOrderNum": parseFloat(strategies[0].SellOrderNum),
-    //     "OrderAmount": parseFloat(strategies[0].OrderAmount),
-    //   },
-    //   "Taker1": {
-    //     "refPair": strategies[1].ref_pair,
-    //     "OrderAmount": parseFloat(strategies[1].OrderAmount),
-    //     "BuyRatio": configs.Taker1.BuyRatio,
-    //     "SellRatio": configs.Taker1.SellRatio,
-    //   },
-    //   "Taker2": {
-    //     "refPair": strategies[2].ref_pair,
-    //     "OrderAmount": parseFloat(strategies[2].OrderAmount),
-    //     "BuyRatio": configs.Taker2.BuyRatio,
-    //     "SellRatio": configs.Taker2.SellRatio,
-    //   },
-    // }
-    // if (configs.Taker3) {
-    //   newConfig['Taker3'] = {
-    //     "refPair": strategies[3].ref_pair,
-    //     "OrderAmount": parseFloat(strategies[3].OrderAmount),
-    //     "BuyRatio": configs.Taker3.BuyRatio,
-    //     "SellRatio": configs.Taker3.SellRatio,
-    //   }
-    // }
-    // console.log('joy', newConfig)
-  }
-
-  const pause = async (name:string) => {
-    const data = await get_data('stop', {
+    const data = await updateConfigData({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER',
-      bot_type: name.toLowerCase().replace('1','_1').replace('2','_2').replace('3','_3')
+      coin_name: activeCoin,
+      body: newConfig,
     })
-    if(data) {
-      return true
+    if (data) {
+      await getConfig()
     }
   }
 
-  const restart = async (name:string) => {
-    const data = await get_data('start-bot', {
+  const pause = async (name: string) => {
+    const data = await stopBot({
+      key: 1234,
+      exchange_name: activeStrategy.toLowerCase(),
+      coin_name: activeCoin,
+      bot_type: name.toLowerCase().replace('1', '_1').replace('2', '_2').replace('3', '_3')
+    })
+    if (data) {
+      await getConfig()
+    }
+  }
+
+  const restart = async (name: string) => {
+    const data = await startBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
       coin_name: activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER',
-      bot_type: name.toLowerCase().replace('1','_1').replace('2','_2').replace('3','_3')
+      bot_type: name.toLowerCase().replace('1', '_1').replace('2', '_2').replace('3', '_3')
     })
-    if(data) {
-      return true
+    if (data) {
+      await getConfig()
+    }
+  }
+
+  const getBotStatus = async () => {
+    const data = await getStatus({ key: 1234 })
+    if (data) {
+      return data[activeStrategy.toLowerCase()][activeCoin]
     }
   }
 
   const getConfig = async () => {
-    const data = await get_data('get-config', {
+    const data = await getConfigData({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER',
+      coin_name: activeCoin
     })
-    if (data) {
-      const configs = data.output
+    if (data.Maker) {
+      const status = await getBotStatus()
       const list = [
         {
           name: 'Maker',
-          buygrid: configs.Maker.BuyGrid,
-          sellgrid: configs.Maker.SellGrid,
-          BuyOrderNum: configs.Maker.BuyOrderNum,
-          SellOrderNum: configs.Maker.SellOrderNum,
-          OrderAmount: configs.Maker.OrderAmount,
-          UpperBound: configs.MakerUpperBound,
-          LowerBound: configs.MakerLowerBound,
-          running: true,
+          buygrid: data.Maker.BuyGrid,
+          sellgrid: data.Maker.SellGrid,
+          BuyOrderNum: data.Maker.BuyOrderNum,
+          SellOrderNum: data.Maker.SellOrderNum,
+          OrderAmount: data.Maker.OrderAmount,
+          UpperBound: data.MakerUpperBound,
+          LowerBound: data.MakerLowerBound,
+          running: status?.maker == 'Running',
         },
-        {
-          name: 'Taker1',
-          ref_pair: configs.Taker1.refPair,
-          OrderAmount: configs.Taker1.OrderAmount,
-          buyratio: configs.BuyAmountRatio,
-          sellratio: configs.SellAmountRatio,
-          UpperBound: configs.UpperBound,
-          LowerBound: configs.LowerBound,
-          running: true,
-        },
-        {
-          name: 'Taker2',
-          ref_pair: configs.Taker2.refPair,
-          OrderAmount: configs.Taker2.OrderAmount,
-          buyratio: configs.BuyAmountRatio,
-          sellratio: configs.SellAmountRatio,
-          UpperBound: configs.UpperBound,
-          LowerBound: configs.LowerBound,
-          running: true,
-        }
       ]
-      if (configs.Taker3) {
+      if(data.Taker1) {
         list.push({
-          name: 'Taker3',
-          ref_pair: configs.Taker3.refPair,
-          OrderAmount: configs.Taker3.OrderAmount,
-          buyratio: configs.BuyAmountRatio,
-          sellratio: configs.SellAmountRatio,
-          UpperBound: configs.UpperBound,
-          LowerBound: configs.LowerBound,
-          running: true,
+          name: 'Taker1',
+          ref_pair: data.Taker1.refPair,
+          OrderAmount: data.Taker1.OrderAmount,
+          buyratio: data.BuyAmountRatio,
+          sellratio: data.SellAmountRatio,
+          UpperBound: data.UpperBound,
+          LowerBound: data.LowerBound,
+          running: status?.taker_1 == 'Running',
         })
       }
-      setConfigs(configs)
+      if(data.Taker2) {
+        list.push({
+          name: 'Taker2',
+          ref_pair: data.Taker2.refPair,
+          OrderAmount: data.Taker2.OrderAmount,
+          buyratio: data.BuyAmountRatio,
+          sellratio: data.SellAmountRatio,
+          UpperBound: data.UpperBound,
+          LowerBound: data.LowerBound,
+          running: status?.taker_2 == 'Running',
+        })
+      }
+      if (data.Taker3) {
+        list.push({
+          name: 'Taker3',
+          ref_pair: data.Taker3.refPair,
+          OrderAmount: data.Taker3.OrderAmount,
+          buyratio: data.BuyAmountRatio,
+          sellratio: data.SellAmountRatio,
+          UpperBound: data.UpperBound,
+          LowerBound: data.LowerBound,
+          running: status?.taker_3 == 'Running',
+        })
+      }
       setStrategies(list)
     }
   }
 
-
   useEffect(() => {
     getConfig()
+    activeStrategy == 'Bitmart' ? setActiveCoin('QH') : activeStrategy == 'Toobit' ? setActiveCoin('MAKA') : setActiveCoin('HUNTER')
   }, [activeStrategy])
+
+  useEffect(()=>{
+    getConfig()
+  }, [activeCoin])
 
   return (
     <div>
@@ -206,8 +167,24 @@ const MM = (props: any) => {
             >
               Digifinex
             </h3>
+            <h3
+              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'Toobit' ? 'white' : '#ffffffb3' }}
+              onClick={() => setActiveStrategy("Toobit")}
+            >
+              Toobit
+            </h3>
           </div>
         </div>
+        {activeStrategy == 'Digifinex' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
+          {['HUNTER', 'LUK', 'MAKA'].map(coin => {
+            return <span
+              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
+              onClick={() => { setActiveCoin(coin) }}
+            >
+              {coin}
+            </span>
+            })}
+        </div>}
       </div>
       <div style={{ padding: '10px 250px' }}>
         <Table
@@ -301,7 +278,7 @@ const MM = (props: any) => {
                   <>
                     {entry.running
                       ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
-                      : <Tag color='red' style={{ background: 'transparent' }}>PAUSED</Tag>
+                      : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
                     }
                   </>
                 )
@@ -314,11 +291,7 @@ const MM = (props: any) => {
                   <Button
                     type="link"
                     onClick={() => {
-                      const flag = entry.running ? pause(entry.name) : restart(entry.name)
-                      if(flag) {
-                        entry.running = !entry.running
-                        edit(entry)
-                      }
+                      entry.running ? pause(entry.name) : restart(entry.name)
                     }}
                   >
                     {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
@@ -340,8 +313,7 @@ const MM = (props: any) => {
           pagination={false}
         />
       </div>
-      <AddModal showModal={showAddModal} setShowModal={setShowAddModal} />
-      <EditModal showModal={showEditModal} setShowModal={setShowEditModal} row={selectedRow} setRow={setSelectedRow} edit={edit} />
+      <EditModal showModal={showEditModal} setShowModal={setShowEditModal} row={selectedRow} setRow={setSelectedRow} save={save} />
     </div>
   )
 }

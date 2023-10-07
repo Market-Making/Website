@@ -22,9 +22,6 @@ const OxConnectWallet = props => {
       activate(injected);
     } catch (error) {
       message.info('No provider was found');
-      if (account) {
-        localStorage.setItem("login_status", "on");
-      }
       return
     }
   };
@@ -41,12 +38,27 @@ const OxConnectWallet = props => {
     }
   }
 
+  useEffect(()=>{
+    if (account) {
+      localStorage.setItem("login_status", "on");
+    }
+  }, [account])
+
   useEffect(() => {
     if (window.ethereum) {
       window.ethereum.on("chainChanged", (newChainId) => {
         document.location.reload();
       })
     }
+  }, [])
+
+  useEffect(() => {
+    const connectWalletOnPageLoad = async () => {
+      if (localStorage?.getItem("login_status") === "on") {
+        selectWallet()
+      }
+    }
+    connectWalletOnPageLoad()
   }, [])
 
   return (
