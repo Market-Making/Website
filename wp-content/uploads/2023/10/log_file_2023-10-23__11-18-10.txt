@@ -1,0 +1,51 @@
+
+---Downloaded files---
+The import files for: Startup were successfully downloaded!
+Initial max execution time = 5000
+Files info:
+Site URL = https://hash.capital
+Data file = /home/hash.capital/public_html/wp-content/uploads/2023/10/demo-content-import-file_2023-10-23__11-18-10.xml
+Widget file = /home/hash.capital/public_html/wp-content/uploads/2023/10/demo-widgets-import-file_2023-10-23__11-18-10.json
+Customizer file = /home/hash.capital/public_html/wp-content/uploads/2023/10/demo-customizer-import-file_2023-10-23__11-18-10.dat
+Redux files:
+geekfolio_theme_setting -> /home/hash.capital/public_html/wp-content/uploads/2023/10/demo-redux-import-file_0-2023-10-23__11-18-10.json 
+
+
+------
+New AJAX call!
+
+
+------
+New AJAX call!
+
+
+------
+New AJAX call!
+
+
+------
+New AJAX call!
+
+
+------
+New AJAX call!
+
+
+---Importing widgets---
+Main Sidebar : 
+
+Search - No Title - Imported
+GEEKFOLIO: Blog Featured Posts - Featured posts - Imported
+Tag Cloud - Tag Cloud - Imported
+GEEKFOLIO - About Us - SOCIAL - Imported
+
+
+
+---Importing Redux settings---
+Redux settings import for: geekfolio_theme_setting finished successfully!
+
+---Importing customizer settings---
+Customizer settings import finished!
+
+---ocdi/after_import---
+
