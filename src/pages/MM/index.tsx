@@ -65,7 +65,7 @@ const MM = (props: any) => {
     const data = await startBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeStrategy == 'Bitmart' ? 'QH' : 'HUNTER',
+      coin_name: activeCoin,
       bot_type: name.toLowerCase().replace('1', '_1').replace('2', '_2').replace('3', '_3')
     })
     if (data) {
@@ -74,7 +74,7 @@ const MM = (props: any) => {
   }
 
   const getBotStatus = async () => {
-    const data = await getStatus({ key: 1234 })
+    const data = await getStatus({ key: 1234, coin_name: activeCoin })
     if (data) {
       return data[activeStrategy.toLowerCase()][activeCoin]
     }
@@ -138,6 +138,9 @@ const MM = (props: any) => {
         })
       }
       setStrategies(list)
+    } else {
+      message.error('server error')
+      setStrategies([])
     }
   }
 
