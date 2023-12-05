@@ -146,7 +146,7 @@ const MM = (props: any) => {
 
   useEffect(() => {
     getConfig()
-    activeStrategy == 'Bitmart' ? setActiveCoin('QH') : activeStrategy == 'Toobit' ? setActiveCoin('MAKA') : setActiveCoin('HUNTER')
+    activeStrategy == 'Bitmart' ? setActiveCoin('QH') : activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') : setActiveCoin('HUNTER')
   }, [activeStrategy])
 
   useEffect(()=>{
@@ -176,6 +176,12 @@ const MM = (props: any) => {
             >
               Toobit
             </h3>
+            <h3
+              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'MEXC' ? 'white' : '#ffffffb3' }}
+              onClick={() => setActiveStrategy("MEXC")}
+            >
+              MEXC
+            </h3>
           </div>
         </div>
         {activeStrategy == 'Digifinex' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
@@ -200,6 +206,16 @@ const MM = (props: any) => {
         </div>}
         {activeStrategy == 'Toobit' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
           {['MAKA'].map(coin => {
+            return <span
+              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
+              onClick={() => { setActiveCoin(coin) }}
+            >
+              {coin}
+            </span>
+            })}
+        </div>}
+        {activeStrategy == 'MEXC' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
+          {['MAKA', 'SEND'].map(coin => {
             return <span
               style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
               onClick={() => { setActiveCoin(coin) }}
