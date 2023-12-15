@@ -185,7 +185,7 @@ const MM = (props: any) => {
           </div>
         </div>
         {activeStrategy == 'Digifinex' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['HUNTER', 'LUK', 'MAKA', 'KUB', 'SEND'].map(coin => {
+          {['HUNTER', 'LUK', 'MAKA', 'KUB', 'SEND', 'KEEP'].map(coin => {
             return <span
               style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
               onClick={() => { setActiveCoin(coin) }}
