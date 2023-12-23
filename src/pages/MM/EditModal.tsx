@@ -44,7 +44,7 @@ const EditModal = (props: any) => {
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Grid</div>
             <Input
               value={row?.buygrid}
-              onChange={(e: any) => { setRow({ ...row, buygrid: parseFloat(e.target.value), sellgrid: parseFloat(e.target.value) }) }}
+              onChange={(e: any) => { setRow({ ...row, buygrid: e.target.value, sellgrid: e.target.value }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
           </Form.Item>}
