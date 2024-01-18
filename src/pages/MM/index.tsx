@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Tag, Space, message } from 'antd'
+import { Table, Button, Tag, Space, message, Spin } from 'antd'
 import { PauseOutlined, CaretRightOutlined, EditOutlined } from '@ant-design/icons'
 import { getConfigData, startBot, stopBot, getStatus, updateConfigData } from '@/utils/apis'
 import EditModal from './EditModal'
@@ -12,30 +12,44 @@ const MM = (props: any) => {
   const [selectedRow, setSelectedRow] = useState()
   const [activeStrategy, setActiveStrategy] = useState('Bitmart')
   const [activeCoin, setActiveCoin] = useState('QH')
+  const [loading, setLoading] = useState(false)
 
   const save = async (row: any) => {
+    setLoading(true)
     let newConfig
     if (row.name == 'Maker') {
       newConfig = {
-        "MakerUpperBound": row.UpperBound,
-        "MakerLowerBound": row.LowerBound,
+        "MakerUpperBound": parseFloat(row.UpperBound),
+        "MakerLowerBound": parseFloat(row.LowerBound),
         "Maker": {
-          "BuyGrid": row.buygrid,
-          "SellGrid": row.sellgrid,
-          "BuyOrderNum": row.BuyOrderNum,
-          "SellOrderNum": row.SellOrderNum,
-          "OrderAmount": row.OrderAmount
+          "BuyGrid": parseFloat(row.buygrid),
+          "SellGrid": parseFloat(row.sellgrid),
+          "BuyOrderNum": parseFloat(row.BuyOrderNum),
+          "SellOrderNum": parseFloat(row.SellOrderNum),
+          "OrderAmount": parseFloat(row.OrderAmount),
+          "Ask1Ratio": parseFloat(row.Ask1Ratio),
+          "Ask2Ratio": parseFloat(row.Ask2Ratio),
+          "Ask3Ratio": parseFloat(row.Ask3Ratio),
+          "MinAsk1Ratio": parseFloat(row.MinAsk1Ratio),
+          "TargetRatio": parseFloat(row.TargetRatio),
+          "FillNum": parseFloat(row.FillNum),
         }
       }
     } else {
       newConfig = {
-        "UpperBound": row.UpperBound,
-        "LowerBound": row.LowerBound,
-        "BuyAmountRatio": row.buyratio,
-        "SellAmountRatio": row.sellratio,
+        "UpperBound": parseFloat(row.UpperBound),
+        "LowerBound": parseFloat(row.LowerBound),
+        "BuyAmountRatio": parseFloat(row.buyratio),
+        "SellAmountRatio": parseFloat(row.sellratio),
       }
       newConfig[row.name] = {
-        "OrderAmount": row.OrderAmount
+        "OrderAmount": parseFloat(row.OrderAmount),
+        "Ask1Ratio": parseFloat(row.Ask1Ratio),
+        "Ask2Ratio": parseFloat(row.Ask2Ratio),
+        "Ask3Ratio": parseFloat(row.Ask3Ratio),
+        "Bid1Ratio": parseFloat(row.Bid1Ratio),
+        "Bid2Ratio": parseFloat(row.Bid2Ratio),
+        "Bid3Ratio": parseFloat(row.Bid3Ratio),
       }
     }
     const data = await updateConfigData({
@@ -46,10 +60,12 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
+      setLoading(false)
     }
   }
 
   const pause = async (name: string) => {
+    setLoading(true)
     const data = await stopBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
@@ -58,10 +74,12 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
+      setLoading(false)
     }
   }
 
   const restart = async (name: string) => {
+    setLoading(true)
     const data = await startBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
@@ -70,6 +88,7 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
+      setLoading(false)
     }
   }
 
@@ -98,6 +117,12 @@ const MM = (props: any) => {
           OrderAmount: data.Maker.OrderAmount,
           UpperBound: data.MakerUpperBound,
           LowerBound: data.MakerLowerBound,
+          Ask1Ratio: data.Maker.Ask1Ratio,
+          Ask2Ratio: data.Maker.Ask2Ratio,
+          Ask3Ratio: data.Maker.Ask3Ratio,
+          MinAsk1Ratio: data.Maker.MinAsk1Ratio,
+          TargetRatio: data.Maker.TargetRatio,
+          FillNum: data.Maker.FillNum,
           running: status?.maker == 'Running',
         },
       ]
@@ -110,6 +135,12 @@ const MM = (props: any) => {
           sellratio: data.SellAmountRatio,
           UpperBound: data.UpperBound,
           LowerBound: data.LowerBound,
+          Ask1Ratio: data.Taker1.Ask1Ratio,
+          Ask2Ratio: data.Taker1.Ask2Ratio,
+          Ask3Ratio: data.Taker1.Ask3Ratio,
+          Bid1Ratio: data.Taker1.Bid1Ratio,
+          Bid2Ratio: data.Taker1.Bid2Ratio,
+          Bid3Ratio: data.Taker1.Bid3Ratio,
           running: status?.taker_1 == 'Running',
         })
       }
@@ -122,6 +153,12 @@ const MM = (props: any) => {
           sellratio: data.SellAmountRatio,
           UpperBound: data.UpperBound,
           LowerBound: data.LowerBound,
+          Ask1Ratio: data.Taker2.Ask1Ratio,
+          Ask2Ratio: data.Taker2.Ask2Ratio,
+          Ask3Ratio: data.Taker2.Ask3Ratio,
+          Bid1Ratio: data.Taker2.Bid1Ratio,
+          Bid2Ratio: data.Taker2.Bid2Ratio,
+          Bid3Ratio: data.Taker2.Bid3Ratio,
           running: status?.taker_2 == 'Running',
         })
       }
@@ -134,12 +171,17 @@ const MM = (props: any) => {
           sellratio: data.SellAmountRatio,
           UpperBound: data.UpperBound,
           LowerBound: data.LowerBound,
+          Ask1Ratio: data.Taker3.Ask1Ratio,
+          Ask2Ratio: data.Taker3.Ask2Ratio,
+          Ask3Ratio: data.Taker3.Ask3Ratio,
+          Bid1Ratio: data.Taker3.Bid1Ratio,
+          Bid2Ratio: data.Taker3.Bid2Ratio,
+          Bid3Ratio: data.Taker3.Bid3Ratio,
           running: status?.taker_3 == 'Running',
         })
       }
       setStrategies(list)
     } else {
-      message.error('server error')
       setStrategies([])
     }
   }
@@ -245,131 +287,133 @@ const MM = (props: any) => {
         </div>}
       </div>
       <div style={{ padding: '10px 250px' }}>
-        <Table
-          className={styles.nobgTable}
-          dataSource={strategies}
-          columns={[
-            {
-              title: '#',
-              dataIndex: 'id',
-              render: (_, __, index) => {
-                return index + 1
+        <Spin spinning={loading}>
+          <Table
+            className={styles.nobgTable}
+            dataSource={strategies}
+            columns={[
+              {
+                title: '#',
+                dataIndex: 'id',
+                render: (_, __, index) => {
+                  return index + 1
+                },
               },
-            },
-            {
-              title: 'Name',
-              dataIndex: 'name',
-              render: (_, entry: any) => {
-                return (
-                  <div>{entry.name}</div>
-                )
+              {
+                title: 'Name',
+                dataIndex: 'name',
+                render: (_, entry: any) => {
+                  return (
+                    <div>{entry.name}</div>
+                  )
+                }
+              },
+              {
+                title: 'Grid',
+                dataIndex: 'grid',
+                render: (_, entry) => {
+                  return (
+                    <div>{entry.name == 'Maker' ? entry.buygrid : '—'}</div>
+                  )
+                },
+              },
+              {
+                title: 'Order Number',
+                dataIndex: 'OrderNum',
+                render: (_, entry) => {
+                  return (
+                    <div>{entry.name == 'Maker' ? entry.BuyOrderNum : '—'}</div>
+                  )
+                },
+              },
+              {
+                title: 'Buy Ratio',
+                dataIndex: 'buyAmountRatio',
+                render: (_, entry) => {
+                  return (
+                    <div>{entry.name == 'Maker' ? '—' : entry.buyratio}</div>
+                  )
+                },
+              },
+              {
+                title: 'Sell Ratio',
+                dataIndex: 'sellAmountRatio',
+                render: (_, entry) => {
+                  return (
+                    <div>{entry.name == 'Maker' ? '—' : entry.sellratio}</div>
+                  )
+                },
+              },
+              {
+                title: 'Order Amount',
+                dataIndex: 'orderAmount',
+                render: (_, entry) => {
+                  return (
+                    <div>{entry.OrderAmount} USDT</div>
+                  )
+                },
+              },
+              {
+                title: 'Upper Boundary',
+                dataIndex: 'upperBound',
+                render: (_, entry) => {
+                  return (
+                    <div>{parseFloat(entry.UpperBound).toPrecision(4)}</div>
+                  )
+                },
+              },
+              {
+                title: 'Lower Boundary',
+                dataIndex: 'lowerBound',
+                render: (_, entry) => {
+                  return (
+                    <div>{parseFloat(entry.LowerBound).toPrecision(4)}</div>
+                  )
+                },
+              },
+              {
+                title: 'Status',
+                dataIndex: 'status',
+                render: (_, entry) => {
+                  return (
+                    <>
+                      {entry.running
+                        ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
+                        : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
+                      }
+                    </>
+                  )
+                },
+              },
+              {
+                title: ' ',
+                render: (_, entry, index) => (
+                  <Space size="middle">
+                    <Button
+                      type="link"
+                      onClick={() => {
+                        entry.running ? pause(entry.name) : restart(entry.name)
+                      }}
+                    >
+                      {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
+                    </Button>
+                    <Button
+                      type="link"
+                      style={{ marginLeft: -10 }}
+                      onClick={() => {
+                        setSelectedRow(entry)
+                        setShowEditModal(true)
+                      }}
+                    >
+                      <EditOutlined style={{ color: !entry.running ? 'white' : 'red' }} />
+                    </Button>
+                  </Space>
+                ),
               }
-            },
-            {
-              title: 'Grid',
-              dataIndex: 'grid',
-              render: (_, entry) => {
-                return (
-                  <div>{entry.name == 'Maker' ? entry.buygrid : '—'}</div>
-                )
-              },
-            },
-            {
-              title: 'Order Number',
-              dataIndex: 'OrderNum',
-              render: (_, entry) => {
-                return (
-                  <div>{entry.name == 'Maker' ? entry.BuyOrderNum : '—'}</div>
-                )
-              },
-            },
-            {
-              title: 'Buy Ratio',
-              dataIndex: 'buyAmountRatio',
-              render: (_, entry) => {
-                return (
-                  <div>{entry.name == 'Maker' ? '—' : entry.buyratio}</div>
-                )
-              },
-            },
-            {
-              title: 'Sell Ratio',
-              dataIndex: 'sellAmountRatio',
-              render: (_, entry) => {
-                return (
-                  <div>{entry.name == 'Maker' ? '—' : entry.sellratio}</div>
-                )
-              },
-            },
-            {
-              title: 'Order Amount',
-              dataIndex: 'orderAmount',
-              render: (_, entry) => {
-                return (
-                  <div>{entry.OrderAmount} USDT</div>
-                )
-              },
-            },
-            {
-              title: 'Upper Boundary',
-              dataIndex: 'upperBound',
-              render: (_, entry) => {
-                return (
-                  <div>{parseFloat(entry.UpperBound).toPrecision(4)}</div>
-                )
-              },
-            },
-            {
-              title: 'Lower Boundary',
-              dataIndex: 'lowerBound',
-              render: (_, entry) => {
-                return (
-                  <div>{parseFloat(entry.LowerBound).toPrecision(4)}</div>
-                )
-              },
-            },
-            {
-              title: 'Status',
-              dataIndex: 'status',
-              render: (_, entry) => {
-                return (
-                  <>
-                    {entry.running
-                      ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
-                      : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
-                    }
-                  </>
-                )
-              },
-            },
-            {
-              title: ' ',
-              render: (_, entry, index) => (
-                <Space size="middle">
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      entry.running ? pause(entry.name) : restart(entry.name)
-                    }}
-                  >
-                    {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
-                  </Button>
-                  <Button
-                    type="link"
-                    style={{ marginLeft: -10 }}
-                    onClick={() => {
-                      setSelectedRow(entry)
-                      setShowEditModal(true)
-                    }}
-                  >
-                    <EditOutlined style={{ color: !entry.running ? 'white' : 'red' }} />
-                  </Button>
-                </Space>
-              ),
-            }
-          ]}
-          pagination={false}
-        />
+            ]}
+            pagination={false}
+          />
+        </Spin>
       </div>
       <EditModal showModal={showEditModal} setShowModal={setShowEditModal} row={selectedRow} setRow={setSelectedRow} save={save} />
     </div>
