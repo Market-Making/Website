@@ -13,6 +13,133 @@ const MM = (props: any) => {
   const [activeStrategy, setActiveStrategy] = useState('Bitmart')
   const [activeCoin, setActiveCoin] = useState('QH')
   const [loading, setLoading] = useState(false)
+  const [botStatus, setBotStatus] = useState([])
+
+  const configTable = [
+    {
+      title: '#',
+      dataIndex: 'id',
+      render: (_, __, index) => {
+        return index + 1
+      },
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      render: (_, entry: any) => {
+        return (
+          <div>{entry.name}</div>
+        )
+      }
+    },
+    {
+      title: 'Grid',
+      dataIndex: 'grid',
+      render: (_, entry) => {
+        return (
+          <div>{entry.name == 'Maker' ? entry.buygrid : '—'}</div>
+        )
+      },
+    },
+    {
+      title: 'Order Number',
+      dataIndex: 'OrderNum',
+      render: (_, entry) => {
+        return (
+          <div>{entry.name == 'Maker' ? entry.BuyOrderNum : '—'}</div>
+        )
+      },
+    },
+    {
+      title: 'Buy Ratio',
+      dataIndex: 'buyAmountRatio',
+      render: (_, entry) => {
+        return (
+          <div>{entry.name == 'Maker' ? '—' : entry.buyratio}</div>
+        )
+      },
+    },
+    {
+      title: 'Sell Ratio',
+      dataIndex: 'sellAmountRatio',
+      render: (_, entry) => {
+        return (
+          <div>{entry.name == 'Maker' ? '—' : entry.sellratio}</div>
+        )
+      },
+    },
+    {
+      title: 'Order Amount',
+      dataIndex: 'orderAmount',
+      render: (_, entry) => {
+        return (
+          <div>{entry.OrderAmount} USDT</div>
+        )
+      },
+    },
+    {
+      title: 'Upper Boundary',
+      dataIndex: 'upperBound',
+      render: (_, entry) => {
+        return (
+          <div>{parseFloat(entry.UpperBound).toPrecision(4)}</div>
+        )
+      },
+    },
+    {
+      title: 'Lower Boundary',
+      dataIndex: 'lowerBound',
+      render: (_, entry) => {
+        return (
+          <div>{parseFloat(entry.LowerBound).toPrecision(4)}</div>
+        )
+      },
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (_, entry) => {
+        return (
+          <>
+            {entry.running
+              ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
+              : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
+            }
+          </>
+        )
+      },
+      hidden: activeStrategy != "Bitmart",
+    },
+    {
+      title: ' ',
+      render: (_, entry, index) => (
+        <Button
+          type="link"
+          onClick={() => {
+            entry.running ? pause(entry.name) : restart(entry.name)
+          }}
+        >
+          {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
+        </Button>
+      ),
+      hidden: activeStrategy != "Bitmart",
+    },
+    {
+      title: ' ',
+      render: (_, entry, index) => (
+        <Button
+          type="link"
+          style={{ marginLeft: -50 }}
+          onClick={() => {
+            setSelectedRow(entry)
+            setShowEditModal(true)
+          }}
+        >
+          <EditOutlined style={{ color: !entry.running ? 'white' : 'red' }} />
+        </Button>
+      ),
+    }
+  ]
 
   const save = async (row: any) => {
     setLoading(true)
@@ -84,7 +211,7 @@ const MM = (props: any) => {
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
       coin_name: activeCoin,
-      bot_type: name.toLowerCase().replace('1', '_1').replace('2', '_2').replace('3', '_3')
+      bot_type: name.replace('Taker1', 'taker_1').replace('Taker2', 'taker_2').replace('Taker3', 'taker_3')
     })
     if (data) {
       await getConfig()
@@ -93,9 +220,19 @@ const MM = (props: any) => {
   }
 
   const getBotStatus = async () => {
+    setBotStatus([])
     const data = await getStatus({ key: 1234, coin_name: activeCoin })
     if (data) {
-      return data[activeStrategy.toLowerCase()][activeCoin]
+      let status = data[activeStrategy.toLowerCase()][activeCoin]
+      let res = []
+      for(let key in status){
+        res.push({
+          name: key,
+          running: status[key] == "Running",
+        })
+      }
+      setBotStatus(res)
+      return status
     }
   }
 
@@ -126,7 +263,7 @@ const MM = (props: any) => {
           running: status?.maker == 'Running',
         },
       ]
-      if(data.Taker1) {
+      if (data.Taker1) {
         list.push({
           name: 'Taker1',
           ref_pair: data.Taker1.refPair,
@@ -144,7 +281,7 @@ const MM = (props: any) => {
           running: status?.taker_1 == 'Running',
         })
       }
-      if(data.Taker2) {
+      if (data.Taker2) {
         list.push({
           name: 'Taker2',
           ref_pair: data.Taker2.refPair,
@@ -188,16 +325,17 @@ const MM = (props: any) => {
 
   useEffect(() => {
     getConfig()
-    activeStrategy == 'Bitmart' ? setActiveCoin('QH') : 
-      activeStrategy == 'XT' ? setActiveCoin('GAME') : 
-      activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') : 
-      setActiveCoin('HUNTER')
+    activeStrategy == 'Bitmart' ? setActiveCoin('QH') :
+      activeStrategy == 'XT' ? setActiveCoin('GAME') :
+        activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') :
+          setActiveCoin('HUNTER')
   }, [activeStrategy])
 
-  useEffect(()=>{
+  useEffect(() => {
     getConfig()
+    getBotStatus()
   }, [activeCoin])
-
+  
   return (
     <div>
       <div style={{ padding: '60px 250px 20px 250px', display: 'grid' }}>
@@ -236,24 +374,24 @@ const MM = (props: any) => {
           </div>
         </div>
         {activeStrategy == 'Digifinex' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['HUNTER', 'LUK', 'MAKA', 'KUB', 'SEND', 'KEEP'].map(coin => {
+          {['HUNTER', 'MAKA', 'SEND', 'KEEP'].map(coin => {
             return <span
               style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
               onClick={() => { setActiveCoin(coin) }}
             >
               {coin}
             </span>
-            })}
+          })}
         </div>}
         {activeStrategy == 'Bitmart' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['QH', 'LISA'].map(coin => {
+          {['QH'].map(coin => {
             return <span
               style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
               onClick={() => { setActiveCoin(coin) }}
             >
               {coin}
             </span>
-            })}
+          })}
         </div>}
         {activeStrategy == 'Toobit' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
           {['MAKA'].map(coin => {
@@ -263,7 +401,7 @@ const MM = (props: any) => {
             >
               {coin}
             </span>
-            })}
+          })}
         </div>}
         {activeStrategy == 'MEXC' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
           {['MAKA', 'SEND', 'KEEP'].map(coin => {
@@ -273,7 +411,7 @@ const MM = (props: any) => {
             >
               {coin}
             </span>
-            })}
+          })}
         </div>}
         {activeStrategy == 'XT' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
           {['GAME'].map(coin => {
@@ -283,7 +421,7 @@ const MM = (props: any) => {
             >
               {coin}
             </span>
-            })}
+          })}
         </div>}
       </div>
       <div style={{ padding: '10px 250px' }}>
@@ -291,104 +429,52 @@ const MM = (props: any) => {
           <Table
             className={styles.nobgTable}
             dataSource={strategies}
-            columns={[
-              {
-                title: '#',
-                dataIndex: 'id',
-                render: (_, __, index) => {
-                  return index + 1
+            columns={configTable.filter(e => !e.hidden)}
+            pagination={false}
+          />
+        </Spin>
+      </div>
+      {activeStrategy != "Bitmart" &&
+        <div style={{ padding: '20px 250px' }}>
+          <Spin spinning={loading}>
+            <Table
+              className={styles.nobgTable}
+              dataSource={botStatus}
+              columns={[
+                {
+                  title: '#',
+                  dataIndex: 'id',
+                  render: (_, __, index) => {
+                    return index + 1
+                  },
                 },
-              },
-              {
-                title: 'Name',
-                dataIndex: 'name',
-                render: (_, entry: any) => {
-                  return (
-                    <div>{entry.name}</div>
-                  )
-                }
-              },
-              {
-                title: 'Grid',
-                dataIndex: 'grid',
-                render: (_, entry) => {
-                  return (
-                    <div>{entry.name == 'Maker' ? entry.buygrid : '—'}</div>
-                  )
+                {
+                  title: 'Name',
+                  width: 900,
+                  dataIndex: 'name',
+                  render: (_, entry: any) => {
+                    return (
+                      <div>{entry.name}</div>
+                    )
+                  }
                 },
-              },
-              {
-                title: 'Order Number',
-                dataIndex: 'OrderNum',
-                render: (_, entry) => {
-                  return (
-                    <div>{entry.name == 'Maker' ? entry.BuyOrderNum : '—'}</div>
-                  )
+                {
+                  title: 'Status',
+                  dataIndex: 'status',
+                  render: (_, entry) => {
+                    return (
+                      <>
+                        {entry.running
+                          ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
+                          : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
+                        }
+                      </>
+                    )
+                  },
                 },
-              },
-              {
-                title: 'Buy Ratio',
-                dataIndex: 'buyAmountRatio',
-                render: (_, entry) => {
-                  return (
-                    <div>{entry.name == 'Maker' ? '—' : entry.buyratio}</div>
-                  )
-                },
-              },
-              {
-                title: 'Sell Ratio',
-                dataIndex: 'sellAmountRatio',
-                render: (_, entry) => {
-                  return (
-                    <div>{entry.name == 'Maker' ? '—' : entry.sellratio}</div>
-                  )
-                },
-              },
-              {
-                title: 'Order Amount',
-                dataIndex: 'orderAmount',
-                render: (_, entry) => {
-                  return (
-                    <div>{entry.OrderAmount} USDT</div>
-                  )
-                },
-              },
-              {
-                title: 'Upper Boundary',
-                dataIndex: 'upperBound',
-                render: (_, entry) => {
-                  return (
-                    <div>{parseFloat(entry.UpperBound).toPrecision(4)}</div>
-                  )
-                },
-              },
-              {
-                title: 'Lower Boundary',
-                dataIndex: 'lowerBound',
-                render: (_, entry) => {
-                  return (
-                    <div>{parseFloat(entry.LowerBound).toPrecision(4)}</div>
-                  )
-                },
-              },
-              {
-                title: 'Status',
-                dataIndex: 'status',
-                render: (_, entry) => {
-                  return (
-                    <>
-                      {entry.running
-                        ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
-                        : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
-                      }
-                    </>
-                  )
-                },
-              },
-              {
-                title: ' ',
-                render: (_, entry, index) => (
-                  <Space size="middle">
+                {
+                  title: 'Operation',
+                  render: (_, entry, index) => (
                     <Button
                       type="link"
                       onClick={() => {
@@ -397,24 +483,13 @@ const MM = (props: any) => {
                     >
                       {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
                     </Button>
-                    <Button
-                      type="link"
-                      style={{ marginLeft: -10 }}
-                      onClick={() => {
-                        setSelectedRow(entry)
-                        setShowEditModal(true)
-                      }}
-                    >
-                      <EditOutlined style={{ color: !entry.running ? 'white' : 'red' }} />
-                    </Button>
-                  </Space>
-                ),
-              }
-            ]}
-            pagination={false}
-          />
-        </Spin>
-      </div>
+                  ),
+                },
+              ]}
+              pagination={false}
+            />
+          </Spin>
+        </div>}
       <EditModal showModal={showEditModal} setShowModal={setShowEditModal} row={selectedRow} setRow={setSelectedRow} save={save} />
     </div>
   )
