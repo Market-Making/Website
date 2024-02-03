@@ -197,7 +197,7 @@ const MM = (props: any) => {
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
       coin_name: activeCoin,
-      bot_type: name.toLowerCase().replace('1', '_1').replace('2', '_2').replace('3', '_3')
+      bot_type: name.replace('Taker1', 'taker_1').replace('Taker2', 'taker_2').replace('Taker3', 'taker_3')
     })
     if (data) {
       await getConfig()
