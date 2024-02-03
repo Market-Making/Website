@@ -220,18 +220,23 @@ const MM = (props: any) => {
   }
 
   const getBotStatus = async () => {
+    setLoading(true)
     setBotStatus([])
-    const data = await getStatus({ key: 1234, coin_name: activeCoin })
+    const data = await getStatus({ key: 1234, exchange_name: activeStrategy.toLowerCase(), coin_name: activeCoin })
     if (data) {
-      let status = data[activeStrategy.toLowerCase()][activeCoin]
+      let status = data
       let res = []
-      for(let key in status){
+      for(let key in data){
         res.push({
           name: key,
-          running: status[key] == "Running",
+          running: data[key]["status"] == "Running",
+          base_balance: data[key]["BaseBalance"],
+          quote_balance: data[key]["QuoteBalance"],
+          volume_24h: data[key]["24HVolume"],
         })
       }
       setBotStatus(res)
+      setLoading(false)
       return status
     }
   }
@@ -243,7 +248,6 @@ const MM = (props: any) => {
       coin_name: activeCoin
     })
     if (data.Maker) {
-      const status = await getBotStatus()
       const list = [
         {
           name: 'Maker',
@@ -260,7 +264,7 @@ const MM = (props: any) => {
           MinAsk1Ratio: data.Maker.MinAsk1Ratio,
           TargetRatio: data.Maker.TargetRatio,
           FillNum: data.Maker.FillNum,
-          running: status?.maker == 'Running',
+          running: botStatus?.find(item => item.name == 'maker')?.running,
         },
       ]
       if (data.Taker1) {
@@ -278,7 +282,7 @@ const MM = (props: any) => {
           Bid1Ratio: data.Taker1.Bid1Ratio,
           Bid2Ratio: data.Taker1.Bid2Ratio,
           Bid3Ratio: data.Taker1.Bid3Ratio,
-          running: status?.taker_1 == 'Running',
+          running: botStatus?.find(item => item.name == 'taker_1')?.running,
         })
       }
       if (data.Taker2) {
@@ -296,7 +300,7 @@ const MM = (props: any) => {
           Bid1Ratio: data.Taker2.Bid1Ratio,
           Bid2Ratio: data.Taker2.Bid2Ratio,
           Bid3Ratio: data.Taker2.Bid3Ratio,
-          running: status?.taker_2 == 'Running',
+          running: botStatus?.find(item => item.name == 'taker_2')?.running,
         })
       }
       if (data.Taker3) {
@@ -314,7 +318,7 @@ const MM = (props: any) => {
           Bid1Ratio: data.Taker3.Bid1Ratio,
           Bid2Ratio: data.Taker3.Bid2Ratio,
           Bid3Ratio: data.Taker3.Bid3Ratio,
-          running: status?.taker_3 == 'Running',
+          running: botStatus?.find(item => item.name == 'taker_3')?.running,
         })
       }
       setStrategies(list)
@@ -329,7 +333,7 @@ const MM = (props: any) => {
       activeStrategy == 'XT' ? setActiveCoin('GAME') :
         activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') :
           setActiveCoin('HUNTER')
-  }, [activeStrategy])
+  }, [activeStrategy, botStatus])
 
   useEffect(() => {
     getConfig()
@@ -450,11 +454,38 @@ const MM = (props: any) => {
                 },
                 {
                   title: 'Name',
-                  width: 900,
+                  width: 400,
                   dataIndex: 'name',
                   render: (_, entry: any) => {
                     return (
                       <div>{entry.name}</div>
+                    )
+                  }
+                },
+                {
+                  title: 'USDT',
+                  dataIndex: 'base_balance',
+                  render: (_, entry: any) => {
+                    return (
+                      <div>$ {entry.base_balance}</div>
+                    )
+                  }
+                },
+                {
+                  title: activeCoin,
+                  dataIndex: 'quote_balance',
+                  render: (_, entry: any) => {
+                    return (
+                      <div>$ {entry.quote_balance}</div>
+                    )
+                  }
+                },
+                {
+                  title: '24H Volume',
+                  dataIndex: '24h_volume',
+                  render: (_, entry: any) => {
+                    return (
+                      <div>{entry.volume_24h}</div>
                     )
                   }
                 },
