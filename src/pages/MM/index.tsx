@@ -237,12 +237,12 @@ const MM = (props: any) => {
       }
       setBotStatus(res)
       setLoading(false)
-      return status
+      return res
     }
   }
 
   const getConfig = async () => {
-    await getBotStatus()
+    const status =await getBotStatus()
     const data = await getConfigData({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
@@ -265,7 +265,7 @@ const MM = (props: any) => {
           MinAsk1Ratio: data.Maker.MinAsk1Ratio,
           TargetRatio: data.Maker.TargetRatio,
           FillNum: data.Maker.FillNum,
-          running: botStatus?.find(item => item.name == 'maker')?.running,
+          running: status?.find(item => item.name == 'maker')?.running,
         },
       ]
       if (data.Taker1) {
@@ -283,7 +283,7 @@ const MM = (props: any) => {
           Bid1Ratio: data.Taker1.Bid1Ratio,
           Bid2Ratio: data.Taker1.Bid2Ratio,
           Bid3Ratio: data.Taker1.Bid3Ratio,
-          running: botStatus?.find(item => item.name == 'taker_1')?.running,
+          running: status?.find(item => item.name == 'taker_1')?.running,
         })
       }
       if (data.Taker2) {
@@ -301,7 +301,7 @@ const MM = (props: any) => {
           Bid1Ratio: data.Taker2.Bid1Ratio,
           Bid2Ratio: data.Taker2.Bid2Ratio,
           Bid3Ratio: data.Taker2.Bid3Ratio,
-          running: botStatus?.find(item => item.name == 'taker_2')?.running,
+          running: status?.find(item => item.name == 'taker_2')?.running,
         })
       }
       if (data.Taker3) {
@@ -319,7 +319,7 @@ const MM = (props: any) => {
           Bid1Ratio: data.Taker3.Bid1Ratio,
           Bid2Ratio: data.Taker3.Bid2Ratio,
           Bid3Ratio: data.Taker3.Bid3Ratio,
-          running: botStatus?.find(item => item.name == 'taker_3')?.running,
+          running: status?.find(item => item.name == 'taker_3')?.running,
         })
       }
       setStrategies(list)
