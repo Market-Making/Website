@@ -333,7 +333,7 @@ const MM = (props: any) => {
       activeStrategy == 'XT' ? setActiveCoin('GAME') :
         activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') :
           setActiveCoin('HUNTER')
-  }, [activeStrategy, botStatus])
+  }, [activeStrategy])
 
   useEffect(() => {
     getConfig()
