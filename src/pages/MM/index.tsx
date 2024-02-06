@@ -187,7 +187,6 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
-      await getBotStatus()
       setLoading(false)
     }
   }
@@ -202,7 +201,6 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
-      await getBotStatus()
       setLoading(false)
     }
   }
@@ -217,7 +215,6 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
-      await getBotStatus()
       setLoading(false)
     }
   }
@@ -245,6 +242,7 @@ const MM = (props: any) => {
   }
 
   const getConfig = async () => {
+    await getBotStatus()
     const data = await getConfigData({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
@@ -340,7 +338,6 @@ const MM = (props: any) => {
 
   useEffect(() => {
     getConfig()
-    getBotStatus()
   }, [activeCoin])
   
   return (
