@@ -187,6 +187,7 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
+      await getBotStatus()
       setLoading(false)
     }
   }
@@ -201,6 +202,7 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
+      await getBotStatus()
       setLoading(false)
     }
   }
@@ -215,6 +217,7 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
+      await getBotStatus()
       setLoading(false)
     }
   }
