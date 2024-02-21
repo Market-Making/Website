@@ -199,8 +199,8 @@ const MM = (props: any) => {
       coin_name: activeCoin,
       bot_type: name.replace('Taker1', 'taker_1').replace('Taker2', 'taker_2').replace('Taker3', 'taker_3')
     })
-    if (data) {
-      await getConfig()
+    if (data == 'Successful') {
+      botStatus.find(item => item.name == name)['running'] = false
       setLoading(false)
     }
   }
@@ -213,8 +213,8 @@ const MM = (props: any) => {
       coin_name: activeCoin,
       bot_type: name.replace('Taker1', 'taker_1').replace('Taker2', 'taker_2').replace('Taker3', 'taker_3')
     })
-    if (data) {
-      await getConfig()
+    if (data == 'Successful') {
+      botStatus.find(item => item.name == name)['running'] = true
       setLoading(false)
     }
   }
@@ -232,7 +232,6 @@ const MM = (props: any) => {
           running: data[key]["status"] == "Running",
           base_balance: data[key]["BaseBalance"],
           quote_balance: data[key]["QuoteBalance"],
-          volume_24h: data[key]["24HVolume"],
         })
       }
       setBotStatus(res)
@@ -329,7 +328,6 @@ const MM = (props: any) => {
   }
 
   useEffect(() => {
-    getConfig()
     activeStrategy == 'Bitmart' ? setActiveCoin('QH') :
       activeStrategy == 'XT' ? setActiveCoin('GAME') :
         activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') :
@@ -477,15 +475,6 @@ const MM = (props: any) => {
                   render: (_, entry: any) => {
                     return (
                       <div>$ {entry.quote_balance}</div>
-                    )
-                  }
-                },
-                {
-                  title: '24H Volume',
-                  dataIndex: '24h_volume',
-                  render: (_, entry: any) => {
-                    return (
-                      <div>{entry.volume_24h}</div>
                     )
                   }
                 },
