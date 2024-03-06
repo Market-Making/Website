@@ -12,7 +12,8 @@ const MM = (props: any) => {
   const [selectedRow, setSelectedRow] = useState()
   const [activeStrategy, setActiveStrategy] = useState('Bitmart')
   const [activeCoin, setActiveCoin] = useState('QH')
-  const [loading, setLoading] = useState(false)
+  const [configLoading, setConfigLoading] = useState(false)
+  const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
 
   const configTable = [
@@ -142,7 +143,7 @@ const MM = (props: any) => {
   ]
 
   const save = async (row: any) => {
-    setLoading(true)
+    setConfigLoading(true)
     let newConfig
     if (row.name == 'Maker') {
       newConfig = {
@@ -187,12 +188,12 @@ const MM = (props: any) => {
     })
     if (data) {
       await getConfig()
-      setLoading(false)
+      setConfigLoading(false)
     }
   }
 
   const pause = async (name: string) => {
-    setLoading(true)
+    setStatusLoading(true)
     const data = await stopBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
@@ -201,12 +202,12 @@ const MM = (props: any) => {
     })
     if (data == 'Successful') {
       botStatus.find(item => item.name == name)['running'] = false
-      setLoading(false)
+      setStatusLoading(false)
     }
   }
 
   const restart = async (name: string) => {
-    setLoading(true)
+    setStatusLoading(true)
     const data = await startBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
@@ -215,12 +216,12 @@ const MM = (props: any) => {
     })
     if (data == 'Successful') {
       botStatus.find(item => item.name == name)['running'] = true
-      setLoading(false)
+      setStatusLoading(false)
     }
   }
 
   const getBotStatus = async () => {
-    setLoading(true)
+    setStatusLoading(true)
     setBotStatus([])
     const data = await getStatus({ key: 1234, exchange_name: activeStrategy.toLowerCase(), coin_name: activeCoin })
     if (data) {
@@ -235,7 +236,7 @@ const MM = (props: any) => {
         })
       }
       setBotStatus(res)
-      setLoading(false)
+      setStatusLoading(false)
       return res
     }
   }
@@ -427,7 +428,7 @@ const MM = (props: any) => {
         </div>}
       </div>
       <div style={{ padding: '10px 250px' }}>
-        <Spin spinning={loading}>
+        <Spin spinning={configLoading}>
           <Table
             className={styles.nobgTable}
             dataSource={strategies}
@@ -438,7 +439,7 @@ const MM = (props: any) => {
       </div>
       {activeStrategy != "Bitmart" &&
         <div style={{ padding: '20px 250px' }}>
-          <Spin spinning={loading}>
+          <Spin spinning={statusLoading}>
             <Table
               className={styles.nobgTable}
               dataSource={botStatus}
