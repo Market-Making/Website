@@ -7,6 +7,7 @@ const whiteListedAccounts = [
   '0x08bf2999C67a807FD1708670E4C48Ada46aABAc5',
   '0x0754f7fC90F842a6AcE8B6Ec89e4eDadeb2A9bA5',
   '0x33da969b25319aab44b53d8f035aea8d17b533b4',
+  '0x33da969b25319aab44b53d8f035aea8d17b533b4',
 ]
 
 const TopBar = () => {
