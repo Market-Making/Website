@@ -6,7 +6,7 @@ const qs = require('qs')
 
 router.all('/', (req, res) => {
   const { method } = req
-  const basePath = 'http://147.182.251.92:3001'
+  const basePath = 'http://170.64.172.183:3001'
   const url = basePath + req.baseUrl.replace('api','')
 
   const opt = {
