@@ -97,35 +97,6 @@ const MM = (props: any) => {
       },
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (_, entry) => {
-        return (
-          <>
-            {botStatus.find(item => item.name.replace('_','') == entry.name.toLowerCase())
-              ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
-              : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
-            }
-          </>
-        )
-      },
-      hidden: activeStrategy != "Bitmart",
-    },
-    {
-      title: ' ',
-      render: (_, entry, index) => (
-        <Button
-          type="link"
-          onClick={() => {
-            entry.running ? pause(entry.name) : restart(entry.name)
-          }}
-        >
-          {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
-        </Button>
-      ),
-      hidden: activeStrategy != "Bitmart",
-    },
-    {
       title: ' ',
       render: (_, entry, index) => (
         <Button
@@ -226,7 +197,7 @@ const MM = (props: any) => {
     const data = await getStatus({ key: 1234, exchange_name: activeStrategy.toLowerCase(), coin_name: activeCoin })
     if (data) {
       let res = []
-      for(let key in data){
+      for (let key in data) {
         res.push({
           name: key,
           running: data[key]["status"] == "Running",
@@ -340,7 +311,7 @@ const MM = (props: any) => {
     getConfig()
     getBotStatus()
   }, [activeCoin])
-  
+
   return (
     <div>
       <div style={{ padding: '60px 250px 20px 250px', display: 'grid' }}>
@@ -439,80 +410,79 @@ const MM = (props: any) => {
           />
         </Spin>
       </div>
-      {activeStrategy != "Bitmart" &&
-        <div style={{ padding: '20px 250px' }}>
-          <Spin spinning={statusLoading}>
-            <Table
-              className={styles.nobgTable}
-              dataSource={botStatus}
-              columns={[
-                {
-                  title: '#',
-                  dataIndex: 'id',
-                  render: (_, __, index) => {
-                    return index + 1
-                  },
+      <div style={{ padding: '20px 250px' }}>
+        <Spin spinning={statusLoading}>
+          <Table
+            className={styles.nobgTable}
+            dataSource={botStatus}
+            columns={[
+              {
+                title: '#',
+                dataIndex: 'id',
+                render: (_, __, index) => {
+                  return index + 1
                 },
-                {
-                  title: 'Name',
-                  width: 400,
-                  dataIndex: 'name',
-                  render: (_, entry: any) => {
-                    return (
-                      <div>{entry.name}</div>
-                    )
-                  }
+              },
+              {
+                title: 'Name',
+                width: 400,
+                dataIndex: 'name',
+                render: (_, entry: any) => {
+                  return (
+                    <div>{entry.name}</div>
+                  )
+                }
+              },
+              {
+                title: 'USDT',
+                dataIndex: 'base_balance',
+                render: (_, entry: any) => {
+                  return (
+                    <div>$ {entry.base_balance}</div>
+                  )
+                }
+              },
+              {
+                title: activeCoin,
+                dataIndex: 'quote_balance',
+                render: (_, entry: any) => {
+                  return (
+                    <div>$ {entry.quote_balance}</div>
+                  )
+                }
+              },
+              {
+                title: 'Status',
+                dataIndex: 'status',
+                render: (_, entry) => {
+                  return (
+                    <>
+                      {entry.running
+                        ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
+                        : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
+                      }
+                    </>
+                  )
                 },
-                {
-                  title: 'USDT',
-                  dataIndex: 'base_balance',
-                  render: (_, entry: any) => {
-                    return (
-                      <div>$ {entry.base_balance}</div>
-                    )
-                  }
-                },
-                {
-                  title: activeCoin,
-                  dataIndex: 'quote_balance',
-                  render: (_, entry: any) => {
-                    return (
-                      <div>$ {entry.quote_balance}</div>
-                    )
-                  }
-                },
-                {
-                  title: 'Status',
-                  dataIndex: 'status',
-                  render: (_, entry) => {
-                    return (
-                      <>
-                        {entry.running
-                          ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
-                          : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
-                        }
-                      </>
-                    )
-                  },
-                },
-                {
-                  title: 'Operation',
-                  render: (_, entry, index) => (
-                    <Button
-                      type="link"
-                      onClick={() => {
-                        entry.running ? pause(entry.name) : restart(entry.name)
-                      }}
-                    >
-                      {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
-                    </Button>
-                  ),
-                },
-              ]}
-              pagination={false}
-            />
-          </Spin>
-        </div>}
+              },
+              {
+                title: 'Operation',
+                render: (_, entry, index) => (
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      entry.running ? pause(entry.name) : restart(entry.name)
+                    }}
+                  >
+                    {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
+                  </Button>
+                ),
+              },
+            ]}
+            pagination={false}
+          />
+        </Spin>
+      </div>
       <EditModal showModal={showEditModal} setShowModal={setShowEditModal} row={selectedRow} setRow={setSelectedRow} save={save} />
     </div>
   )
