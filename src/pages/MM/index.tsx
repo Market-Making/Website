@@ -200,6 +200,8 @@ const MM = (props: any) => {
       for (let key in data) {
         res.push({
           name: key,
+          uid: data[key]["uid"],
+          email: data[key]["email"],
           running: data[key]["status"] == "Running",
           base_balance: data[key]["BaseBalance"],
           quote_balance: data[key]["QuoteBalance"],
@@ -424,12 +426,20 @@ const MM = (props: any) => {
                 },
               },
               {
-                title: 'Name',
-                width: 400,
-                dataIndex: 'name',
+                title: 'Uid',
+                dataIndex: 'uid',
                 render: (_, entry: any) => {
                   return (
-                    <div>{entry.name}</div>
+                    <div>{entry.uid}</div>
+                  )
+                }
+              },
+              {
+                title: 'Email',
+                dataIndex: 'email',
+                render: (_, entry: any) => {
+                  return (
+                    <div>{entry.email}</div>
                   )
                 }
               },
