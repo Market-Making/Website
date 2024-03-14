@@ -197,19 +197,29 @@ const MM = (props: any) => {
     const data = await getStatus({ key: 1234, exchange_name: activeStrategy.toLowerCase(), coin_name: activeCoin })
     if (data) {
       let res = []
-      for (let key in data) {
+      for (let key in data[0]) {
         res.push({
           name: key,
-          uid: data[key]["uid"],
-          email: data[key]["email"],
-          running: data[key]["status"] == "Running",
-          base_balance: data[key]["BaseBalance"],
-          quote_balance: data[key]["QuoteBalance"],
+          uid: data[0][key]["uid"],
+          email: data[0][key]["email"],
+          running: data[0][key]["status"] == "Running",
+          base_balance: data[0][key]["BaseBalance"],
+          quote_balance: data[0][key]["QuoteBalance"],
         })
       }
+      res.push({
+        name: '',
+        uid: 'Total Balance',
+        email: '',
+        running: '',
+        base_balance: data[1],
+        quote_balance: data[2],
+      })
       setBotStatus(res)
       setStatusLoading(false)
       return res
+    } else {
+      setBotStatus([])
     }
   }
 
@@ -421,8 +431,10 @@ const MM = (props: any) => {
               {
                 title: '#',
                 dataIndex: 'id',
-                render: (_, __, index) => {
-                  return index + 1
+                render: (_, entry, index) => {
+                  return (
+                    <>{ entry.uid != 'Total Balance' ? index + 1 : <></> }</>
+                  )
                 },
               },
               {
@@ -467,9 +479,11 @@ const MM = (props: any) => {
                 render: (_, entry) => {
                   return (
                     <>
-                      {entry.running
-                        ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
-                        : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
+                      {entry.uid != 'Total Balance'
+                        ? entry.running
+                          ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
+                          : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
+                        : <></>
                       }
                     </>
                   )
@@ -484,7 +498,7 @@ const MM = (props: any) => {
                       entry.running ? pause(entry.name) : restart(entry.name)
                     }}
                   >
-                    {entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
+                    {entry.uid != 'Total Balance' ? entry.running ? <PauseOutlined /> : <CaretRightOutlined /> : <></>}
                   </Button>
                 ),
               },
