@@ -201,7 +201,7 @@ const MM = (props: any) => {
         res.push({
           name: key,
           uid: data[0][key]["uid"],
-          email: data[0][key]["email"],
+          subaccount: data[0][key]["subaccount"],
           running: data[0][key]["status"] == "Running",
           base_balance: data[0][key]["BaseBalance"],
           quote_balance: data[0][key]["QuoteBalance"],
@@ -210,7 +210,7 @@ const MM = (props: any) => {
       res.push({
         name: '',
         uid: 'Total Balance',
-        email: '',
+        subaccount: '',
         running: '',
         base_balance: data[1],
         quote_balance: data[2],
@@ -447,11 +447,11 @@ const MM = (props: any) => {
                 }
               },
               {
-                title: 'Email',
-                dataIndex: 'email',
+                title: 'SubAccount',
+                dataIndex: 'subaccount',
                 render: (_, entry: any) => {
                   return (
-                    <div>{entry.email}</div>
+                    <div>{entry.subaccount}</div>
                   )
                 }
               },
