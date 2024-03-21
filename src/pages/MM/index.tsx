@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Tag, Space, message, Spin } from 'antd'
-import { PauseOutlined, CaretRightOutlined, EditOutlined } from '@ant-design/icons'
-import { getConfigData, startBot, stopBot, getStatus, updateConfigData } from '@/utils/apis'
+import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined } from '@ant-design/icons'
+import { getConfigData, startBot, stopBot, cancelBot, getStatus, updateConfigData } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
 
@@ -169,7 +169,7 @@ const MM = (props: any) => {
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
       coin_name: activeCoin,
-      bot_type: name.replace('Taker1', 'taker_1').replace('Taker2', 'taker_2').replace('Taker3', 'taker_3')
+      bot_type: name
     })
     if (data == 'Successful') {
       botStatus.find(item => item.name == name)['running'] = false
@@ -183,12 +183,26 @@ const MM = (props: any) => {
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
       coin_name: activeCoin,
-      bot_type: name.replace('Taker1', 'taker_1').replace('Taker2', 'taker_2').replace('Taker3', 'taker_3')
+      bot_type: name
     })
     if (data == 'Successful') {
       botStatus.find(item => item.name == name)['running'] = true
       setStatusLoading(false)
     }
+  }
+
+  const cancel = async (name: string) => {
+    setStatusLoading(true)
+    const data = await cancelBot({
+      key: 1234,
+      exchange_name: activeStrategy.toLowerCase(),
+      coin_name: activeCoin,
+      bot_type: name
+    })
+    if (data == 'Successful') {
+      setStatusLoading(false)
+      message.success('Order Canceled')
+    } 
   }
 
   const getBotStatus = async () => {
@@ -267,42 +281,6 @@ const MM = (props: any) => {
           Bid2Ratio: data.Taker1.Bid2Ratio,
           Bid3Ratio: data.Taker1.Bid3Ratio,
           // running: status?.find(item => item.name == 'taker_1')?.running,
-        })
-      }
-      if (data.Taker2) {
-        list.push({
-          name: 'Taker2',
-          ref_pair: data.Taker2.refPair,
-          OrderAmount: data.Taker2.OrderAmount,
-          buyratio: data.BuyAmountRatio,
-          sellratio: data.SellAmountRatio,
-          UpperBound: data.UpperBound,
-          LowerBound: data.LowerBound,
-          Ask1Ratio: data.Taker2.Ask1Ratio,
-          Ask2Ratio: data.Taker2.Ask2Ratio,
-          Ask3Ratio: data.Taker2.Ask3Ratio,
-          Bid1Ratio: data.Taker2.Bid1Ratio,
-          Bid2Ratio: data.Taker2.Bid2Ratio,
-          Bid3Ratio: data.Taker2.Bid3Ratio,
-          // running: status?.find(item => item.name == 'taker_2')?.running,
-        })
-      }
-      if (data.Taker3) {
-        list.push({
-          name: 'Taker3',
-          ref_pair: data.Taker3.refPair,
-          OrderAmount: data.Taker3.OrderAmount,
-          buyratio: data.BuyAmountRatio,
-          sellratio: data.SellAmountRatio,
-          UpperBound: data.UpperBound,
-          LowerBound: data.LowerBound,
-          Ask1Ratio: data.Taker3.Ask1Ratio,
-          Ask2Ratio: data.Taker3.Ask2Ratio,
-          Ask3Ratio: data.Taker3.Ask3Ratio,
-          Bid1Ratio: data.Taker3.Bid1Ratio,
-          Bid2Ratio: data.Taker3.Bid2Ratio,
-          Bid3Ratio: data.Taker3.Bid3Ratio,
-          // running: status?.find(item => item.name == 'taker_3')?.running,
         })
       }
       setStrategies(list)
@@ -433,7 +411,7 @@ const MM = (props: any) => {
                 dataIndex: 'id',
                 render: (_, entry, index) => {
                   return (
-                    <>{ entry.uid != 'Total Balance' ? index + 1 : <></> }</>
+                    <>{entry.uid != 'Total Balance' ? index + 1 : <></>}</>
                   )
                 },
               },
@@ -492,14 +470,25 @@ const MM = (props: any) => {
               {
                 title: 'Operation',
                 render: (_, entry, index) => (
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      entry.running ? pause(entry.name) : restart(entry.name)
-                    }}
-                  >
-                    {entry.uid != 'Total Balance' ? entry.running ? <PauseOutlined /> : <CaretRightOutlined /> : <></>}
-                  </Button>
+                  <div>
+                    <Button
+                      type="link"
+                      onClick={() => {
+                        entry.running ? pause(entry.name) : restart(entry.name)
+                      }}
+                    >
+                      {entry.uid != 'Total Balance' ? entry.running ? <PauseOutlined /> : <CaretRightOutlined /> : <></>}
+                    </Button>
+                    <Button
+                      type="link"
+                      onClick={() => {
+                        cancel(entry.name)
+                      }}
+                      disabled={entry.running}
+                    >
+                      {entry.uid != 'Total Balance' && <TransactionOutlined />}
+                    </Button>
+                  </div>
                 ),
               },
             ]}

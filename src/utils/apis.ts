@@ -21,6 +21,13 @@ export function stopBot(data: any) {
   })
 }
 
+export function cancelBot(data: any) {
+  return request.default.get({
+    url: 'api/cancel',
+    data,
+  })
+}
+
 export function getStatus(data: any) {
   return request.default.get({
     url: 'api/get-all-status',
