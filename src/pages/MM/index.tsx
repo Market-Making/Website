@@ -304,7 +304,7 @@ const MM = (props: any) => {
 
   return (
     <div>
-      <div style={{ padding: '60px 250px 20px 250px', display: 'grid' }}>
+      <div style={{ padding: '10px 250px 10px', display: 'grid' }}>
         <div style={{ borderBottom: '1px solid #333333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ float: 'left', display: 'flex' }}>
             <h3
@@ -481,10 +481,13 @@ const MM = (props: any) => {
                     </Button>
                     <Button
                       type="link"
-                      onClick={() => {
-                        cancel(entry.name)
+                      onClick={async () => {
+                        if(entry.running) {
+                          await pause(entry.name)
+                        }
+                        await cancel(entry.name)
+                        await restart(entry.name)
                       }}
-                      disabled={entry.running}
                     >
                       {entry.uid != 'Total Balance' && <TransactionOutlined />}
                     </Button>
