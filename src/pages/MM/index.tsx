@@ -492,7 +492,7 @@ const MM = (props: any) => {
                     >
                       {entry.uid != 'Total Balance' && <TransactionOutlined />}
                     </Button>
-                    {activeStrategy == 'MEXC' && <Button
+                    <Button
                       type="link"
                       onClick={async () => {
                         if (entry.running) {
@@ -505,8 +505,7 @@ const MM = (props: any) => {
                     >
                       {entry.uid != 'Total Balance' && <DollarOutlined />}
                     </Button>
-                    }
-                    {activeStrategy == 'MEXC' && <Button
+                    <Button
                       type="link"
                       onClick={async () => {
                         if (entry.running) {
@@ -519,7 +518,6 @@ const MM = (props: any) => {
                     >
                       {entry.uid != 'Total Balance' && <CopyrightOutlined />}
                     </Button>
-                    }
                   </div>
                 ),
               },
