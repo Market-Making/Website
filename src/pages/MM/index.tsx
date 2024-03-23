@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Tag, Space, message, Spin } from 'antd'
-import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined } from '@ant-design/icons'
+import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined } from '@ant-design/icons'
 import { getConfigData, startBot, stopBot, cancelBot, getStatus, updateConfigData } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
@@ -191,18 +191,19 @@ const MM = (props: any) => {
     }
   }
 
-  const cancel = async (name: string) => {
+  const cancel = async (name: string, side = "all") => {
     setStatusLoading(true)
     const data = await cancelBot({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
       coin_name: activeCoin,
-      bot_type: name
+      bot_type: name,
+      side: side,
     })
     if (data == 'Successful') {
       setStatusLoading(false)
       message.success('Order Canceled')
-    } 
+    }
   }
 
   const getBotStatus = async () => {
@@ -482,7 +483,7 @@ const MM = (props: any) => {
                     <Button
                       type="link"
                       onClick={async () => {
-                        if(entry.running) {
+                        if (entry.running) {
                           await pause(entry.name)
                         }
                         await cancel(entry.name)
@@ -491,6 +492,34 @@ const MM = (props: any) => {
                     >
                       {entry.uid != 'Total Balance' && <TransactionOutlined />}
                     </Button>
+                    {activeStrategy == 'MEXC' && <Button
+                      type="link"
+                      onClick={async () => {
+                        if (entry.running) {
+                          await pause(entry.name)
+                        }
+                        await cancel(entry.name, 'buy')
+                        await restart(entry.name)
+                      }
+                      }
+                    >
+                      {entry.uid != 'Total Balance' && <DollarOutlined />}
+                    </Button>
+                    }
+                    {activeStrategy == 'MEXC' && <Button
+                      type="link"
+                      onClick={async () => {
+                        if (entry.running) {
+                          await pause(entry.name)
+                        }
+                        await cancel(entry.name, 'sell')
+                        await restart(entry.name)
+                      }
+                      }
+                    >
+                      {entry.uid != 'Total Balance' && <CopyrightOutlined />}
+                    </Button>
+                    }
                   </div>
                 ),
               },
