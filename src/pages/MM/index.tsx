@@ -15,6 +15,7 @@ const MM = (props: any) => {
   const [configLoading, setConfigLoading] = useState(false)
   const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
+  const [totalRunning, setTotalRunning] = useState(false)
 
   const configTable = [
     {
@@ -206,6 +207,64 @@ const MM = (props: any) => {
     }
   }
 
+  const pauseAll = async () => {
+    botStatus.map(async item=> {
+      if(item.running && item.uid != 'Total Balance') {
+        await stopBot({
+          key: 1234,
+          exchange_name: activeStrategy.toLowerCase(),
+          coin_name: activeCoin,
+          bot_type: item.name
+        })
+      }
+    })
+    getBotStatus()
+  }
+
+  const restartAll = async () => {
+    botStatus.map(async item => {
+      if(!item.running && item.uid != 'Total Balance') {
+        await startBot({
+          key: 1234,
+          exchange_name: activeStrategy.toLowerCase(),
+          coin_name: activeCoin,
+          bot_type: item.name
+        })
+      }
+    })
+    getBotStatus()
+  }
+
+  const cancelAll = async (side = "all") => {
+    botStatus.map(async item=> {
+      if(item.uid == 'Total Balance') {
+        return
+      }
+      if(item.running) {
+        await stopBot({
+          key: 1234,
+          exchange_name: activeStrategy.toLowerCase(),
+          coin_name: activeCoin,
+          bot_type: item.name
+        })
+      }
+      await cancelBot({
+        key: 1234,
+        exchange_name: activeStrategy.toLowerCase(),
+        coin_name: activeCoin,
+        bot_type: item.name,
+        side: side,
+      })
+      await startBot({
+        key: 1234,
+        exchange_name: activeStrategy.toLowerCase(),
+        coin_name: activeCoin,
+        bot_type: item.name
+      })
+    })
+    getBotStatus()
+  }
+
   const getBotStatus = async () => {
     setStatusLoading(true)
     setBotStatus([])
@@ -230,6 +289,7 @@ const MM = (props: any) => {
         base_balance: data[1],
         quote_balance: data[2],
       })
+      setTotalRunning(res[0].running)
       setBotStatus(res)
       setStatusLoading(false)
       return res
@@ -239,7 +299,6 @@ const MM = (props: any) => {
   }
 
   const getConfig = async () => {
-    // const status =await getBotStatus()
     setConfigLoading(true)
     const data = await getConfigData({
       key: 1234,
@@ -263,7 +322,6 @@ const MM = (props: any) => {
           MinAsk1Ratio: data.Maker.MinAsk1Ratio,
           TargetRatio: data.Maker.TargetRatio,
           FillNum: data.Maker.FillNum,
-          // running: status?.find(item => item.name == 'maker')?.running,
         },
       ]
       if (data.Taker1) {
@@ -281,7 +339,6 @@ const MM = (props: any) => {
           Bid1Ratio: data.Taker1.Bid1Ratio,
           Bid2Ratio: data.Taker1.Bid2Ratio,
           Bid3Ratio: data.Taker1.Bid3Ratio,
-          // running: status?.find(item => item.name == 'taker_1')?.running,
         })
       }
       setStrategies(list)
@@ -475,14 +532,22 @@ const MM = (props: any) => {
                     <Button
                       type="link"
                       onClick={() => {
+                        if(entry.uid == 'Total Balance') {
+                          totalRunning ? pauseAll() : restartAll()
+                          return
+                        }
                         entry.running ? pause(entry.name) : restart(entry.name)
                       }}
                     >
-                      {entry.uid != 'Total Balance' ? entry.running ? <PauseOutlined /> : <CaretRightOutlined /> : <></>}
+                      {entry.uid == 'Total Balance' ? totalRunning ? <PauseOutlined /> : <CaretRightOutlined /> : entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
                     </Button>
                     <Button
                       type="link"
                       onClick={async () => {
+                        if(entry.uid == 'Total Balance') {
+                          cancelAll()
+                          return
+                        }
                         if (entry.running) {
                           await pause(entry.name)
                         }
@@ -490,11 +555,15 @@ const MM = (props: any) => {
                         await restart(entry.name)
                       }}
                     >
-                      {entry.uid != 'Total Balance' && <TransactionOutlined />}
+                      <TransactionOutlined />
                     </Button>
                     <Button
                       type="link"
                       onClick={async () => {
+                        if(entry.uid == 'Total Balance') {
+                          cancelAll('buy')
+                          return
+                        }
                         if (entry.running) {
                           await pause(entry.name)
                         }
@@ -503,11 +572,15 @@ const MM = (props: any) => {
                       }
                       }
                     >
-                      {entry.uid != 'Total Balance' && <DollarOutlined />}
+                      <DollarOutlined />
                     </Button>
                     <Button
                       type="link"
                       onClick={async () => {
+                        if(entry.uid == 'Total Balance') {
+                          cancelAll('sell')
+                          return
+                        }
                         if (entry.running) {
                           await pause(entry.name)
                         }
@@ -516,7 +589,7 @@ const MM = (props: any) => {
                       }
                       }
                     >
-                      {entry.uid != 'Total Balance' && <CopyrightOutlined />}
+                      <CopyrightOutlined />
                     </Button>
                   </div>
                 ),
