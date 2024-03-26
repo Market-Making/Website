@@ -539,7 +539,7 @@ const MM = (props: any) => {
                         entry.running ? pause(entry.name) : restart(entry.name)
                       }}
                     >
-                      {entry.uid == 'Total Balance' ? totalRunning ? <PauseOutlined /> : <CaretRightOutlined /> : entry.running ? <PauseOutlined /> : <CaretRightOutlined />}
+                      {entry.uid == 'Total Balance' ? totalRunning ? <PauseOutlined style={{ color: 'white' }} /> : <CaretRightOutlined style={{ color: 'white' }} /> : entry.running ? <PauseOutlined style={{ color: 'white' }} /> : <CaretRightOutlined style={{ color: 'white' }} />}
                     </Button>
                     <Button
                       type="link"
@@ -555,7 +555,7 @@ const MM = (props: any) => {
                         await restart(entry.name)
                       }}
                     >
-                      <TransactionOutlined />
+                      <TransactionOutlined style={{ color: 'white' }} />
                     </Button>
                     <Button
                       type="link"
@@ -572,7 +572,7 @@ const MM = (props: any) => {
                       }
                       }
                     >
-                      <DollarOutlined />
+                      <DollarOutlined style={{ color: 'white' }} />
                     </Button>
                     <Button
                       type="link"
@@ -589,7 +589,7 @@ const MM = (props: any) => {
                       }
                       }
                     >
-                      <CopyrightOutlined />
+                      <CopyrightOutlined style={{ color: 'white' }} />
                     </Button>
                   </div>
                 ),
