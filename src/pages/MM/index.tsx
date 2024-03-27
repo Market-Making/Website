@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Tag, Space, message, Spin } from 'antd'
+import { Table, Button, Tag, message, Spin, Tooltip } from 'antd'
 import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined } from '@ant-design/icons'
 import { getConfigData, startBot, stopBot, cancelBot, getStatus, updateConfigData } from '@/utils/apis'
 import EditModal from './EditModal'
@@ -208,8 +208,8 @@ const MM = (props: any) => {
   }
 
   const pauseAll = async () => {
-    botStatus.map(async item=> {
-      if(item.running && item.uid != 'Total Balance') {
+    botStatus.map(async item => {
+      if (item.running && item.uid != 'Total Balance') {
         await stopBot({
           key: 1234,
           exchange_name: activeStrategy.toLowerCase(),
@@ -223,7 +223,7 @@ const MM = (props: any) => {
 
   const restartAll = async () => {
     botStatus.map(async item => {
-      if(!item.running && item.uid != 'Total Balance') {
+      if (!item.running && item.uid != 'Total Balance') {
         await startBot({
           key: 1234,
           exchange_name: activeStrategy.toLowerCase(),
@@ -236,11 +236,11 @@ const MM = (props: any) => {
   }
 
   const cancelAll = async (side = "all") => {
-    botStatus.map(async item=> {
-      if(item.uid == 'Total Balance') {
+    botStatus.map(async item => {
+      if (item.uid == 'Total Balance') {
         return
       }
-      if(item.running) {
+      if (item.running) {
         await stopBot({
           key: 1234,
           exchange_name: activeStrategy.toLowerCase(),
@@ -532,19 +532,24 @@ const MM = (props: any) => {
                     <Button
                       type="link"
                       onClick={() => {
-                        if(entry.uid == 'Total Balance') {
+                        if (entry.uid == 'Total Balance') {
                           totalRunning ? pauseAll() : restartAll()
                           return
                         }
                         entry.running ? pause(entry.name) : restart(entry.name)
                       }}
                     >
-                      {entry.uid == 'Total Balance' ? totalRunning ? <PauseOutlined style={{ color: 'white' }} /> : <CaretRightOutlined style={{ color: 'white' }} /> : entry.running ? <PauseOutlined style={{ color: 'white' }} /> : <CaretRightOutlined style={{ color: 'white' }} />}
+                      {entry.uid == 'Total Balance' ? totalRunning
+                        ? <Tooltip title="stop all"><PauseOutlined style={{ color: 'white' }} /></Tooltip>
+                        : <Tooltip title="start all"><CaretRightOutlined style={{ color: 'white' }} /></Tooltip> : entry.running
+                        ? <Tooltip title="stop bot"><PauseOutlined style={{ color: 'white' }} /></Tooltip>
+                        : <Tooltip title="start bot"><CaretRightOutlined style={{ color: 'white' }} /></Tooltip>
+                      }
                     </Button>
                     <Button
                       type="link"
                       onClick={async () => {
-                        if(entry.uid == 'Total Balance') {
+                        if (entry.uid == 'Total Balance') {
                           cancelAll()
                           return
                         }
@@ -555,12 +560,12 @@ const MM = (props: any) => {
                         await restart(entry.name)
                       }}
                     >
-                      <TransactionOutlined style={{ color: 'white' }} />
+                      <Tooltip title="free all"><TransactionOutlined style={{ color: 'white' }} /></Tooltip>
                     </Button>
                     <Button
                       type="link"
                       onClick={async () => {
-                        if(entry.uid == 'Total Balance') {
+                        if (entry.uid == 'Total Balance') {
                           cancelAll('buy')
                           return
                         }
@@ -572,12 +577,12 @@ const MM = (props: any) => {
                       }
                       }
                     >
-                      <DollarOutlined style={{ color: 'white' }} />
+                      <Tooltip title="free USDT"><DollarOutlined style={{ color: 'white' }} /></Tooltip>
                     </Button>
                     <Button
                       type="link"
                       onClick={async () => {
-                        if(entry.uid == 'Total Balance') {
+                        if (entry.uid == 'Total Balance') {
                           cancelAll('sell')
                           return
                         }
@@ -589,7 +594,7 @@ const MM = (props: any) => {
                       }
                       }
                     >
-                      <CopyrightOutlined style={{ color: 'white' }} />
+                      <Tooltip title={`free ${activeCoin}`}><CopyrightOutlined style={{ color: 'white' }} /></Tooltip>
                     </Button>
                   </div>
                 ),
