@@ -28,6 +28,13 @@ export function cancelBot(data: any) {
   })
 }
 
+export function transfer(data: any) {
+  return request.default.get({
+    url: 'api/transfer',
+    data,
+  })
+}
+
 export function getStatus(data: any) {
   return request.default.get({
     url: 'api/get-all-status',

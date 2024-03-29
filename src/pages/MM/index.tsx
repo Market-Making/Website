@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Tag, message, Spin, Tooltip } from 'antd'
-import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined } from '@ant-design/icons'
-import { getConfigData, startBot, stopBot, cancelBot, getStatus, updateConfigData } from '@/utils/apis'
+import { Table, Button, Tag, message, Spin, Tooltip, Form, Input, Modal } from 'antd'
+import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined, SendOutlined } from '@ant-design/icons'
+import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
 
@@ -16,6 +16,9 @@ const MM = (props: any) => {
   const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
   const [totalRunning, setTotalRunning] = useState(false)
+  const [showTransfer, setShowTransfer] = useState(false)
+  const [transferBot, setTransferBot] = useState('')
+  const [transferAmount, setTransferAmount] = useState('0')
 
   const configTable = [
     {
@@ -261,6 +264,17 @@ const MM = (props: any) => {
         coin_name: activeCoin,
         bot_type: item.name
       })
+    })
+    getBotStatus()
+  }
+
+  const transferToFuture = async (name: string, amount: string) => {
+    await transfer({
+      key: 1234,
+      exchange_name: activeStrategy.toLowerCase(),
+      coin_name: activeCoin,
+      bot_type: name,
+      amount: amount,
     })
     getBotStatus()
   }
@@ -596,6 +610,16 @@ const MM = (props: any) => {
                     >
                       <Tooltip title={`free ${activeCoin}`}><CopyrightOutlined style={{ color: 'white' }} /></Tooltip>
                     </Button>
+                    {activeStrategy == 'MEXC' && entry.uid != 'Total Balance' &&
+                      <Button
+                        type="link"
+                        onClick={() => {
+                          setTransferBot(entry.name)
+                          setShowTransfer(true)
+                        }}
+                      >
+                        <Tooltip title="transfer"><SendOutlined style={{ color: 'white' }} /></Tooltip>
+                      </Button>}
                   </div>
                 ),
               },
@@ -605,6 +629,37 @@ const MM = (props: any) => {
         </Spin>
       </div>
       <EditModal showModal={showEditModal} setShowModal={setShowEditModal} row={selectedRow} setRow={setSelectedRow} save={save} />
+      <Modal
+        open={showTransfer}
+        className={styles.transferModal}
+        footer={null}
+        onCancel={() => { setShowTransfer(false) }}
+      >
+        <Form layout='horizontal' style={{ marginTop: 30 }}>
+          <Form.Item>
+            <div style={{ fontSize: 15, color: '#b6b6b5' }}>Amount</div>
+            <Input
+              value={transferAmount}
+              onChange={(e: any) => { setTransferAmount(e.target.value) }}
+              style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+            />
+          </Form.Item>
+        </Form>
+        <Button
+          className={styles.confirmButton}
+          disabled={transferAmount == '' || !Number(transferAmount) || transferAmount == '0'}
+          onClick={async () => {
+            await pause(transferBot)
+            await transferToFuture(transferBot, transferAmount)
+            await restart(transferBot)
+            setShowTransfer(false)
+            setTransferBot('')
+            setTransferAmount('0')
+          }}
+        >
+          Transfer
+        </Button>
+      </Modal>
     </div>
   )
 }
