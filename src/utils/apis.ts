@@ -42,6 +42,20 @@ export function getStatus(data: any) {
   })
 }
 
+export function startOtc(data: any) {
+  return request.default.get({
+    url: 'api/otc',
+    data,
+  })
+}
+
+export function getOtc(data: any) {
+  return request.default.get({
+    url: 'api/get-otc',
+    data,
+  })
+}
+
 export function updateConfigData(data: any) {
   return request.default.post({
     url: 'api/update-config',
