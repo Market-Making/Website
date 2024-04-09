@@ -44,7 +44,14 @@ export function getStatus(data: any) {
 
 export function startOtc(data: any) {
   return request.default.get({
-    url: 'api/otc',
+    url: 'api/start-otc',
+    data,
+  })
+}
+
+export function stopOtc(data: any) {
+  return request.default.get({
+    url: 'api/stop-otc',
     data,
   })
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Tag, message, Spin, Tooltip, Form, Input, Modal } from 'antd'
 import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined, SendOutlined } from '@ant-design/icons'
-import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData, startOtc, getOtc } from '@/utils/apis'
+import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
 
@@ -19,7 +19,6 @@ const MM = (props: any) => {
   const [showTransfer, setShowTransfer] = useState(false)
   const [transferBot, setTransferBot] = useState('')
   const [transferAmount, setTransferAmount] = useState('0')
-  const [otcRunning, setOtcRunning] = useState(false)
 
   const configTable = [
     {
@@ -315,10 +314,6 @@ const MM = (props: any) => {
 
   const getConfig = async () => {
     setConfigLoading(true)
-
-    const running = await getOtc({ key: 1234 })
-    setOtcRunning(running)
-
     const data = await getConfigData({
       key: 1234,
       exchange_name: activeStrategy.toLowerCase(),
@@ -455,22 +450,6 @@ const MM = (props: any) => {
               {coin}
             </span>
           })}
-          <Tooltip title={otcRunning ? "Running" : "Start OTC Strategy"}>
-            <Button
-              type="link"
-              style={{ color: 'white', marginLeft: 10, marginTop: -7, border: '.75px solid #333333' }}
-              onClick={async () => {
-                const data =await startOtc({ key: 1234 })
-                if (data == 'Successful') {
-                  setOtcRunning(true)
-                  message.success('OTC Strategy Started')
-                }
-              }}
-              disabled={otcRunning}
-            >
-              OTC
-            </Button>
-          </Tooltip>
         </div>}
         {activeStrategy == 'XT' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
           {['GAME'].map(coin => {
