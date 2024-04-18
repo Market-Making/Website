@@ -1,7 +1,4 @@
 import { useWeb3React } from "@web3-react/core"
-import { useState, useEffect } from 'react'
-import { message, Tooltip } from 'antd'
-import { startOtc, stopOtc, getOtc } from '@/utils/apis'
 import OxConnectWallet from '../OxConnectWallet'
 import styles from './index.less';
 
@@ -15,32 +12,6 @@ const whiteListedAccounts = [
 
 const TopBar = () => {
   const { account } = useWeb3React()
-  const [otcRunning, setOtcRunning] = useState(false)
-
-  const otc = async () => {
-    if (otcRunning) {
-      const data = await stopOtc({ key: 1234 })
-      if (data == 'Successful') {
-        setOtcRunning(false)
-        message.success('OTC Strategy Stopped')
-      }
-    } else {
-      const data = await startOtc({ key: 1234 })
-      if (data == 'Successful') {
-        setOtcRunning(true)
-        message.success('OTC Strategy Started')
-      }
-    }
-  }
-
-  const update = async () => {
-    const running = await getOtc({ key: 1234 })
-    setOtcRunning(running)
-  }
-
-  useEffect(() => {
-    update()
-  }, [])
 
   return (
     <div className={styles.warp}>
@@ -50,11 +21,7 @@ const TopBar = () => {
       <div style={{ width: '70%' }} hidden={!account || !whiteListedAccounts.includes(account)}>
         <span className={styles.menuItem} onClick={() => { window.location.href = '/mm' }}>Market Making</span>
         <span className={styles.menuItem} onClick={() => { }}>Asset Management</span>
-        <span className={styles.menuItem} onClick={() => { otc() }}>
-          <Tooltip title={otcRunning ? "Stop OTC" : "Start OTC"}>
-            OTC
-          </Tooltip>
-        </span>
+        <span className={styles.menuItem} onClick={() => { window.location.href = '/otc' }}>OTC</span>
         <span className={styles.menuItem} onClick={() => { }}>Snipper</span>
       </div>
       <div>

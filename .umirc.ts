@@ -31,6 +31,10 @@ export default defineConfig({
       {
         path: "/mm",
         component: '@/pages/MM',
+      },
+      {
+        path: "/otc",
+        component: '@/pages/otc',
       }
     ]
   }],

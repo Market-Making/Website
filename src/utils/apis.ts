@@ -63,6 +63,13 @@ export function getOtc(data: any) {
   })
 }
 
+export function getOtcStatus(data: any) {
+  return request.default.get({
+    url: 'api/get-otc-status',
+    data,
+  })
+}
+
 export function updateConfigData(data: any) {
   return request.default.post({
     url: 'api/update-config',
