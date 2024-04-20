@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Tag, message, Spin } from 'antd'
-import { getOtc, getOtcStatus } from '@/utils/apis'
+import { getOtc, getOtcStatus, startOtc, stopOtc } from '@/utils/apis'
 import styles from '../MM/styles.less'
 
 const OTC = (props: any) => {
@@ -20,7 +20,6 @@ const OTC = (props: any) => {
         res.push({
           exchange: item["ExchangeID"],
           uid: item["uid"],
-          running: item["status"] == "Running",
           base_balance: item["balances"].find(item => item["coin"] == "USDT")["balance"],
           quote_balance: item["balances"].filter(item => item["coin"] != "USDT").map(item => `${item.balance.toFixed(2)}${item.coin}`).join(', ') || '—',
         })
@@ -119,7 +118,7 @@ const OTC = (props: any) => {
                 render: (_, entry) => {
                   return (
                     <>
-                      {entry.running
+                      {otcRunning
                         ? <Tag color='green' style={{ background: 'transparent' }}>RUNNING</Tag>
                         : <Tag color='red' style={{ background: 'transparent' }}>STOPPED</Tag>
                       }
