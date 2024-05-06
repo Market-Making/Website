@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Tag, message, Spin } from 'antd'
+import { Table, Button, Tag, message, Spin, Input } from 'antd'
 import { getOtc, getOtcStatus, startOtc, stopOtc } from '@/utils/apis'
 import styles from '../MM/styles.less'
 
@@ -8,6 +8,7 @@ const OTC = (props: any) => {
   const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
   const [otcRunning, setOtcRunning] = useState(false)
+  const [timeLimit, setTimeLimit] = useState(0)
 
   const getBotStatus = async () => {
     setStatusLoading(true)
@@ -41,7 +42,7 @@ const OTC = (props: any) => {
         message.success('OTC Strategy Stopped')
       }
     } else {
-      const data = await startOtc({ key: 1234 })
+      const data = await startOtc({ key: 1234, time: timeLimit })
       if (data == 'Successful') {
         setOtcRunning(true)
         message.success('OTC Strategy Started')
@@ -56,12 +57,23 @@ const OTC = (props: any) => {
   return (
     <div>
       <div style={{ padding: '50px 250px' }}>
-        <Button
-          style={{ color: 'white', backgroundColor: 'black', border: '0.75px solid #333333', width: 150, height: 40, marginBottom: 20}}
-          onClick={() => { otc() }}
-        >
-          {otcRunning ? 'Stop OTC' : 'Start OTC'}
-        </Button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+          <Button
+            style={{ color: 'white', backgroundColor: 'black', border: '0.75px solid #333333', width: 150, height: 40, marginLeft: 10 }}
+            onClick={() => { otc() }}
+          >
+            {otcRunning ? 'Stop OTC' : 'Start OTC'}
+          </Button>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Input
+              value={timeLimit}
+              type='number'
+              onChange={(e: any) => { setTimeLimit(e.target.value) }}
+              style={{ height: 40, width: 100, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+            />
+            <span style={{ marginLeft: 10, color: 'white', fontSize: 16 }}>(minutes)</span>
+          </div>
+        </div>
         <Spin spinning={statusLoading}>
           <Table
             className={styles.nobgTable}
