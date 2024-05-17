@@ -93,7 +93,6 @@ const EditModal = (props: any) => {
             style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
           />
         </Form.Item>
-
         <Form.Item>
           <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Order Amount</div>
           <Input
@@ -102,68 +101,85 @@ const EditModal = (props: any) => {
             style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
           />
         </Form.Item>
-
         {showMore && <>
-          <Form.Item>
+          {row?.name == "Maker" && <Form.Item>
+            <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>AsksNum</div>
+            <Input
+              value={row?.AskNum}
+              onChange={(e: any) => { 
+                let num = e.target.value < 10 ? e.target.value : 10
+                setRow({ ...row, 
+                  AskNum: num, 
+                }) 
+              }}
+              style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+            />
+          </Form.Item>}
+          {row?.AskRatio?.map((item, index) => {
+            if (index < row.AskNum) {
+              return <Form.Item>
+                <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}> * Ask {index+1} Ratio</div>
+                <Input
+                  value={item}
+                  onChange={(e: any) => { setRow({ ...row, AskRatio: [...row.AskRatio.slice(0, index), e.target.value,...row.AskRatio.slice(index+1)] }) }}
+                  style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+                />
+              </Form.Item>
+            } else if(row.AskNum != 0) {
+              row.AskRatio[index] = 0
+            }
+          })}
+          {row?.name == "Maker" && <Form.Item>
+            <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>BidsNum</div>
+            <Input
+              value={row?.BidNum}
+              onChange={(e: any) => { 
+                let num = e.target.value < 10 ? e.target.value : 10
+                setRow({ ...row, 
+                  BidNum: num, 
+                }) 
+              }}
+              style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+            />
+          </Form.Item>}
+          {row?.BidRatio?.map((item, index) => {
+            if (index < row.BidNum) {
+              return <Form.Item>
+                <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}> * Bid {index+1} Ratio</div>
+                <Input
+                  value={row?.BidRatio[index]}
+                  onChange={(e: any) => { setRow({ ...row, BidRatio: [...row.BidRatio.slice(0, index), e.target.value,...row.BidRatio.slice(index+1)] }) }}
+                  style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+                />
+              </Form.Item>
+            } else if(row.BidNum != 0) {
+              row.BidRatio[index] = 0
+            }
+          })}
+          {row?.name != "Maker" && <Form.Item>
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Ask1Ratio</div>
             <Input
               value={row?.Ask1Ratio}
               onChange={(e: any) => { setRow({ ...row, Ask1Ratio: e.target.value }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
-          </Form.Item>
-
-          <Form.Item>
+          </Form.Item>}
+          {row?.name != "Maker" && <Form.Item>
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Ask2Ratio</div>
             <Input
               value={row?.Ask2Ratio}
               onChange={(e: any) => { setRow({ ...row, Ask2Ratio: e.target.value }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
-          </Form.Item>
-
-          <Form.Item>
+          </Form.Item>}
+          {row?.name != "Maker" && <Form.Item>
             <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Ask3Ratio</div>
             <Input
               value={row?.Ask3Ratio}
               onChange={(e: any) => { setRow({ ...row, Ask3Ratio: e.target.value }) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
-          </Form.Item>
-
-          {row?.name == "Maker" &&
-            <Form.Item>
-              <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>MinAsk1Ratio</div>
-              <Input
-                value={row?.MinAsk1Ratio}
-                onChange={(e: any) => { setRow({ ...row, MinAsk1Ratio: e.target.value }) }}
-                style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
-              />
-            </Form.Item>
-          }
-
-          {row?.name == "Maker" &&
-            <Form.Item>
-              <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>TargetRatio</div>
-              <Input
-                value={row?.TargetRatio}
-                onChange={(e: any) => { setRow({ ...row, TargetRatio: e.target.value }) }}
-                style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
-              />
-            </Form.Item>
-          }
-
-          {row?.name == "Maker" &&
-            <Form.Item>
-              <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>FillNum</div>
-              <Input
-                value={row?.FillNum}
-                onChange={(e: any) => { setRow({ ...row, FillNum: e.target.value }) }}
-                style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
-              />
-            </Form.Item>
-          }
-
+          </Form.Item>}
           {row?.name != "Maker" &&
             <Form.Item>
               <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Bid1Ratio</div>
@@ -174,7 +190,6 @@ const EditModal = (props: any) => {
               />
             </Form.Item>
           }
-
           {row?.name != "Maker" &&
             <Form.Item>
               <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Bid2Ratio</div>

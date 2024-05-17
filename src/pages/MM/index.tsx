@@ -130,12 +130,8 @@ const MM = (props: any) => {
           "BuyOrderNum": parseFloat(row.BuyOrderNum),
           "SellOrderNum": parseFloat(row.SellOrderNum),
           "OrderAmount": parseFloat(row.OrderAmount),
-          "Ask1Ratio": parseFloat(row.Ask1Ratio),
-          "Ask2Ratio": parseFloat(row.Ask2Ratio),
-          "Ask3Ratio": parseFloat(row.Ask3Ratio),
-          "MinAsk1Ratio": parseFloat(row.MinAsk1Ratio),
-          "TargetRatio": parseFloat(row.TargetRatio),
-          "FillNum": parseFloat(row.FillNum),
+          "AskRatio": row.AskRatio.map(e => parseFloat(e)),
+          "BidRatio": row.BidRatio.map(e => parseFloat(e))
         }
       }
     } else {
@@ -333,9 +329,10 @@ const MM = (props: any) => {
           Ask1Ratio: data.Maker.Ask1Ratio,
           Ask2Ratio: data.Maker.Ask2Ratio,
           Ask3Ratio: data.Maker.Ask3Ratio,
-          MinAsk1Ratio: data.Maker.MinAsk1Ratio,
-          TargetRatio: data.Maker.TargetRatio,
-          FillNum: data.Maker.FillNum,
+          AskRatio: data.Maker.AskRatio,
+          BidRatio: data.Maker.BidRatio,
+          AskNum: data.Maker.AskRatio?.filter(e=>e!=0).length,
+          BidNum: data.Maker.BidRatio?.filter(e=>e!=0).length,
         },
       ]
       if (data.Taker1) {
