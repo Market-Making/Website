@@ -361,7 +361,7 @@ const MM = (props: any) => {
 
   useEffect(() => {
     activeStrategy == 'Bitmart' ? setActiveCoin('QH') :
-      activeStrategy == 'XT' ? setActiveCoin('GAME') :
+      activeStrategy == 'XT' ? setActiveCoin('GAMELUK') :
         activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') :
           setActiveCoin('HUNTER')
   }, [activeStrategy])
@@ -439,7 +439,7 @@ const MM = (props: any) => {
           })}
         </div>}
         {activeStrategy == 'MEXC' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['MAKA', 'SEND', 'KEEP', 'GAME', 'GRE', 'MORRA'].map(coin => {
+          {['MAKA', 'SEND', 'KEEP', 'GAMELUK', 'GRE', 'MORRA'].map(coin => {
             return <span
               style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
               onClick={() => { setActiveCoin(coin) }}
