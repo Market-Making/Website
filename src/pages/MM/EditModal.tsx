@@ -180,37 +180,30 @@ const EditModal = (props: any) => {
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
           </Form.Item>}
-          {row?.name != "Maker" &&
-            <Form.Item>
+          {row?.name != "Maker" && <Form.Item>
               <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Bid1Ratio</div>
               <Input
                 value={row?.Bid1Ratio}
                 onChange={(e: any) => { setRow({ ...row, Bid1Ratio: e.target.value }) }}
                 style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
               />
-            </Form.Item>
-          }
-          {row?.name != "Maker" &&
-            <Form.Item>
+            </Form.Item>}
+          {row?.name != "Maker" && <Form.Item>
               <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Bid2Ratio</div>
               <Input
                 value={row?.Bid2Ratio}
                 onChange={(e: any) => { setRow({ ...row, Bid2Ratio: e.target.value }) }}
                 style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
               />
-            </Form.Item>
-          }
-
-          {row?.name != "Maker" &&
-            <Form.Item>
+            </Form.Item>}
+          {row?.name != "Maker" && <Form.Item>
               <div style={{ fontSize: 15, marginBottom: 5, color: '#b6b6b5' }}>Bid3Ratio</div>
               <Input
                 value={row?.Bid3Ratio}
                 onChange={(e: any) => { setRow({ ...row, Bid3Ratio: e.target.value }) }}
                 style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
               />
-            </Form.Item>
-          }
+            </Form.Item>}
         </>}
 
         <div style={{ cursor: 'pointer', textAlign: 'center', color: '#b6b6b5' }} onClick={() => setShowMore(!showMore)}>
