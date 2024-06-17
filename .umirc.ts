@@ -39,7 +39,7 @@ export default defineConfig({
     ]
   }],
   proxy: {
-    '/api/': { target: 'http://147.182.251.92:6602/', changeOrigin: true },
+    '/api/': { target: 'http://localhost:6602', changeOrigin: true },
   },
   define: defineProperty(),
   alias: {
