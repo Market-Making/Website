@@ -439,7 +439,7 @@ const MM = (props: any) => {
           })}
         </div>}
         {activeStrategy == 'MEXC' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['SEND', 'GRE'].map(coin => {
+          {['SEND', 'GRE', 'SNRN'].map(coin => {
             return <span
               style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
               onClick={() => { setActiveCoin(coin) }}
