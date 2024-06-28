@@ -1,5 +1,11 @@
 const request = require('./request')
 
+export function getActiveCoins(data: any) {
+  return request.default.get({
+    url: 'api/get-active-coins',
+    data,
+  })
+}
 export function getConfigData(data: any) {
   return request.default.get({
     url: 'api/get-config',

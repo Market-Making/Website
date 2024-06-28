@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Tag, message, Spin, Tooltip, Form, Input, Modal } from 'antd'
 import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined, SendOutlined } from '@ant-design/icons'
-import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData } from '@/utils/apis'
+import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData, getActiveCoins } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
 
@@ -11,7 +11,8 @@ const MM = (props: any) => {
   const [strategies, setStrategies] = useState([])
   const [selectedRow, setSelectedRow] = useState()
   const [activeStrategy, setActiveStrategy] = useState('Bitmart')
-  const [activeCoin, setActiveCoin] = useState('QH')
+  const [activeCoin, setActiveCoin] = useState('')
+  const [activeCoinList, setActiveCoinList] = useState([])
   const [configLoading, setConfigLoading] = useState(false)
   const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
@@ -359,16 +360,23 @@ const MM = (props: any) => {
     setConfigLoading(false)
   }
 
+  const getCoins = async () => {
+    const data = await getActiveCoins({key: 1234, exchange_name: activeStrategy.toLowerCase()})
+    if (data) {
+      setActiveCoinList(data)
+      setActiveCoin(data[0])
+    }
+  }
+
   useEffect(() => {
-    activeStrategy == 'Bitmart' ? setActiveCoin('QH') :
-      activeStrategy == 'XT' ? setActiveCoin('GAMELUK') :
-        activeStrategy == 'Toobit' || activeStrategy == 'MEXC' ? setActiveCoin('MAKA') :
-          setActiveCoin('HUNTER')
+    getCoins()
   }, [activeStrategy])
 
   useEffect(() => {
-    getConfig()
-    getBotStatus()
+    if (activeCoin) {
+      getConfig()
+      getBotStatus()
+    }
   }, [activeCoin])
 
   return (
@@ -408,8 +416,8 @@ const MM = (props: any) => {
             </h3>
           </div>
         </div>
-        {activeStrategy == 'Digifinex' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['HUNTER', 'MAKA', 'SEND', 'KEEP'].map(coin => {
+        <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
+          {activeCoinList.map(coin => {
             return <span
               style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
               onClick={() => { setActiveCoin(coin) }}
@@ -417,47 +425,7 @@ const MM = (props: any) => {
               {coin}
             </span>
           })}
-        </div>}
-        {activeStrategy == 'Bitmart' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['QH'].map(coin => {
-            return <span
-              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
-              onClick={() => { setActiveCoin(coin) }}
-            >
-              {coin}
-            </span>
-          })}
-        </div>}
-        {activeStrategy == 'Toobit' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['MAKA'].map(coin => {
-            return <span
-              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
-              onClick={() => { setActiveCoin(coin) }}
-            >
-              {coin}
-            </span>
-          })}
-        </div>}
-        {activeStrategy == 'MEXC' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['SEND', 'GRE', 'SNRN'].map(coin => {
-            return <span
-              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
-              onClick={() => { setActiveCoin(coin) }}
-            >
-              {coin}
-            </span>
-          })}
-        </div>}
-        {activeStrategy == 'XT' && <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {['GAME'].map(coin => {
-            return <span
-              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
-              onClick={() => { setActiveCoin(coin) }}
-            >
-              {coin}
-            </span>
-          })}
-        </div>}
+        </div>
       </div>
       <div style={{ padding: '10px 250px' }}>
         <Spin spinning={configLoading}>
