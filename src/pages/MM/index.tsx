@@ -581,7 +581,7 @@ const MM = (props: any) => {
                     >
                       <Tooltip title={`free ${activeCoin}`}><CopyrightOutlined style={{ color: 'white' }} /></Tooltip>
                     </Button>
-                    {activeStrategy == 'MEXC' && <Button
+                    {activeStrategy == 'MEXC' && entry.name != '' && <Button
                       type="link"
                       style={{ color: 'white' }}
                       onClick={() => {
@@ -592,7 +592,7 @@ const MM = (props: any) => {
                     >
                       buy
                     </Button>}
-                    {activeStrategy == 'MEXC' && <Button
+                    {activeStrategy == 'MEXC' && entry.name != '' && <Button
                       type="link"
                       style={{ color: 'white', marginLeft: -8 }}
                       onClick={() => {
