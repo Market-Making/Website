@@ -41,6 +41,13 @@ export function transfer(data: any) {
   })
 }
 
+export function create_order(data: any) {
+  return request.default.get({
+    url: 'api/create-order',
+    data,
+  })
+}
+
 export function getStatus(data: any) {
   return request.default.get({
     url: 'api/get-all-status',

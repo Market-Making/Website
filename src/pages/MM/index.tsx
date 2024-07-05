@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Tag, message, Spin, Tooltip, Form, Input, Modal } from 'antd'
 import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined, SendOutlined } from '@ant-design/icons'
-import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData, getActiveCoins } from '@/utils/apis'
+import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData, getActiveCoins, create_order } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
 
@@ -17,9 +17,13 @@ const MM = (props: any) => {
   const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
   const [totalRunning, setTotalRunning] = useState(false)
-  const [showTransfer, setShowTransfer] = useState(false)
-  const [transferBot, setTransferBot] = useState('')
-  const [transferAmount, setTransferAmount] = useState('0')
+
+  const [showBuySell, setShowBuySell] = useState('')
+  const [balance, setBalance] = useState('0')
+  const [buyPrice, setBuyPrice] = useState('0')
+  const [sellPrice, setSellPrice] = useState('0')
+  const [buySellAmount, setBuySellAmount] = useState('0')
+  const [botIdx, setBotIdx] = useState(0)
 
   const configTable = [
     {
@@ -303,6 +307,8 @@ const MM = (props: any) => {
       setTotalRunning(res[0].running)
       setBotStatus(res)
       setStatusLoading(false)
+      setSellPrice(data[3])
+      setBuyPrice(data[4])
       return res
     } else {
       setBotStatus([])
@@ -332,8 +338,8 @@ const MM = (props: any) => {
           Ask3Ratio: data.Maker.Ask3Ratio,
           AskRatio: data.Maker.AskRatio,
           BidRatio: data.Maker.BidRatio,
-          AskNum: data.Maker.AskRatio?.filter(e=>e!=0).length,
-          BidNum: data.Maker.BidRatio?.filter(e=>e!=0).length,
+          AskNum: data.Maker.AskRatio?.filter(e => e != 0).length,
+          BidNum: data.Maker.BidRatio?.filter(e => e != 0).length,
         },
       ]
       if (data.Taker1) {
@@ -361,7 +367,7 @@ const MM = (props: any) => {
   }
 
   const getCoins = async () => {
-    const data = await getActiveCoins({key: 1234, exchange_name: activeStrategy.toLowerCase()})
+    const data = await getActiveCoins({ key: 1234, exchange_name: activeStrategy.toLowerCase() })
     if (data) {
       setActiveCoinList(data)
       setActiveCoin(data[0])
@@ -575,16 +581,28 @@ const MM = (props: any) => {
                     >
                       <Tooltip title={`free ${activeCoin}`}><CopyrightOutlined style={{ color: 'white' }} /></Tooltip>
                     </Button>
-                    {activeStrategy == 'MEXC' && entry.uid != 'Total Balance' &&
-                      <Button
-                        type="link"
-                        onClick={() => {
-                          setTransferBot(entry.name)
-                          setShowTransfer(true)
-                        }}
-                      >
-                        <Tooltip title="transfer"><SendOutlined style={{ color: 'white' }} /></Tooltip>
-                      </Button>}
+                    {activeStrategy == 'MEXC' && <Button
+                      type="link"
+                      style={{ color: 'white' }}
+                      onClick={() => {
+                        setBotIdx(index)
+                        setBalance(entry.base_balance)
+                        setShowBuySell('Buy')
+                      }}
+                    >
+                      buy
+                    </Button>}
+                    {activeStrategy == 'MEXC' && <Button
+                      type="link"
+                      style={{ color: 'white', marginLeft: -8 }}
+                      onClick={() => {
+                        setBotIdx(index)
+                        setBalance(entry.quote_balance)
+                        setShowBuySell('Sell')
+                      }}
+                    >
+                      sell
+                    </Button>}
                   </div>
                 ),
               },
@@ -595,34 +613,72 @@ const MM = (props: any) => {
       </div>
       <EditModal showModal={showEditModal} setShowModal={setShowEditModal} row={selectedRow} setRow={setSelectedRow} save={save} />
       <Modal
-        open={showTransfer}
+        open={showBuySell != ''}
         className={styles.transferModal}
         footer={null}
-        onCancel={() => { setShowTransfer(false) }}
+        onCancel={() => { setShowBuySell('');setBuySellAmount('0'); }}
       >
         <Form layout='horizontal' style={{ marginTop: 30 }}>
+          {showBuySell == 'Buy'
+            ? <div style={{ fontSize: 15, color: '#b6b6b5', marginBottom: 20 }}>Available: <span style={{ color: 'white' }}>{balance}</span> USDT</div>
+            : <div style={{ fontSize: 15, color: '#b6b6b5', marginBottom: 20 }}>Available: <span style={{ color: 'white' }}>{(balance / sellPrice).toFixed(2)}</span> {activeCoin} ({balance} USDT)</div>
+          }
           <Form.Item>
-            <div style={{ fontSize: 15, color: '#b6b6b5' }}>Amount</div>
+            <div style={{ fontSize: 15, color: '#b6b6b5' }}>Price</div>
             <Input
-              value={transferAmount}
-              onChange={(e: any) => { setTransferAmount(e.target.value) }}
+              className={styles.myInput}
+              value={showBuySell == 'Buy' ? buyPrice : sellPrice}
+              onChange={(e: any) => { showBuySell == 'Buy' ? setBuyPrice(e.target.value) : setSellPrice(e.target.value) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+              suffix={'USDT'}
             />
+          </Form.Item>
+          <Form.Item>
+            <div style={{ fontSize: 15, color: '#b6b6b5' }}>
+              Amount 
+              <span style={{ fontSize: 14, color: '#b6b6b5', marginLeft: 5}}>( {(buySellAmount * (showBuySell == 'Buy' ? buyPrice : sellPrice)).toFixed(4)} USDT )</span>
+            </div>
+            <Input
+              className={styles.myInput}
+              value={buySellAmount}
+              onChange={(e: any) => { setBuySellAmount(e.target.value) }}
+              style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+              suffix={activeCoin}
+            />
+            
           </Form.Item>
         </Form>
         <Button
           className={styles.confirmButton}
-          disabled={transferAmount == '' || !Number(transferAmount) || transferAmount == '0'}
+          disabled={!Number(buyPrice) || buyPrice == '0' || !Number(sellPrice) || sellPrice == '0' || !Number(buySellAmount) || buySellAmount == '0'}
           onClick={async () => {
-            await pause(transferBot)
-            await transferToFuture(transferBot, transferAmount)
-            await restart(transferBot)
-            setShowTransfer(false)
-            setTransferBot('')
-            setTransferAmount('0')
+            if(buySellAmount * (showBuySell == 'Buy' ? buyPrice : sellPrice) < 5) {
+              message.error('Amount cannot be less than 5 USDT')
+              return
+            }
+            if((showBuySell == 'Buy' && balance < buySellAmount * buyPrice) || (showBuySell == 'Sell' && balance < buySellAmount * sellPrice)) {
+              message.error('Insufficient balance')
+              return
+            }
+            setShowBuySell('')
+            setBuySellAmount('0')
+            setStatusLoading(true)
+            const data = await create_order({
+              key: 1234,
+              exchange_name: activeStrategy.toLowerCase(),
+              coin_name: activeCoin,
+              bot_type: botIdx,
+              side: showBuySell.toLowerCase(),
+              amount: buySellAmount,
+              price: showBuySell == 'Buy' ? buyPrice : sellPrice,
+            })
+            if (data) {
+              message.success('Order placed successfully')
+            }
+            setStatusLoading(false)
           }}
         >
-          Transfer
+          {showBuySell} {activeCoin}
         </Button>
       </Modal>
     </div>
