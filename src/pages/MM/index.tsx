@@ -23,6 +23,7 @@ const MM = (props: any) => {
   const [buyPrice, setBuyPrice] = useState('0')
   const [sellPrice, setSellPrice] = useState('0')
   const [buySellAmount, setBuySellAmount] = useState('0')
+  const [usdtAmount, setUsdtAmount] = useState('0')
   const [botIdx, setBotIdx] = useState(0)
 
   const configTable = [
@@ -385,6 +386,14 @@ const MM = (props: any) => {
     }
   }, [activeCoin])
 
+  useEffect(()=>{
+    if(showBuySell == 'Buy') {
+      setBuySellAmount(usdtAmount / buyPrice)
+    } else if (showBuySell == 'Sell') {
+      setBuySellAmount(usdtAmount / sellPrice)
+    }
+  },[usdtAmount])
+
   return (
     <div>
       <div style={{ padding: '10px 250px 10px', display: 'grid' }}>
@@ -616,7 +625,7 @@ const MM = (props: any) => {
         open={showBuySell != ''}
         className={styles.transferModal}
         footer={null}
-        onCancel={() => { setShowBuySell('');setBuySellAmount('0'); }}
+        onCancel={() => { setShowBuySell('');setBuySellAmount('0');setUsdtAmount('0'); }}
       >
         <Form layout='horizontal' style={{ marginTop: 30 }}>
           {showBuySell == 'Buy'
@@ -636,14 +645,14 @@ const MM = (props: any) => {
           <Form.Item>
             <div style={{ fontSize: 15, color: '#b6b6b5' }}>
               Amount 
-              <span style={{ fontSize: 14, color: '#b6b6b5', marginLeft: 5}}>( {(buySellAmount * (showBuySell == 'Buy' ? buyPrice : sellPrice)).toFixed(4)} USDT )</span>
+              <span style={{ fontSize: 14, color: '#b6b6b5', marginLeft: 5}}>( {Number(buySellAmount).toFixed(4)} {activeCoin} )</span>
             </div>
             <Input
               className={styles.myInput}
-              value={buySellAmount}
-              onChange={(e: any) => { setBuySellAmount(e.target.value) }}
+              value={usdtAmount}
+              onChange={(e: any) => { setUsdtAmount(e.target.value) }}
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
-              suffix={activeCoin}
+              suffix="USDT"
             />
             
           </Form.Item>
@@ -652,16 +661,17 @@ const MM = (props: any) => {
           className={styles.confirmButton}
           disabled={!Number(buyPrice) || buyPrice == '0' || !Number(sellPrice) || sellPrice == '0' || !Number(buySellAmount) || buySellAmount == '0'}
           onClick={async () => {
-            if(buySellAmount * (showBuySell == 'Buy' ? buyPrice : sellPrice) < 5) {
+            if(usdtAmount < 5) {
               message.error('Amount cannot be less than 5 USDT')
               return
             }
-            if((showBuySell == 'Buy' && balance < buySellAmount * buyPrice) || (showBuySell == 'Sell' && balance < buySellAmount * sellPrice)) {
+            if(showBuySell == 'Buy' && balance < usdtAmount) {
               message.error('Insufficient balance')
               return
             }
             setShowBuySell('')
             setBuySellAmount('0')
+            setUsdtAmount('0')
             setStatusLoading(true)
             const data = await create_order({
               key: 1234,
