@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Table, Button, Tag, message, Spin, Tooltip, Form, Input, Modal } from 'antd'
-import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined, SendOutlined } from '@ant-design/icons'
+import { PauseOutlined, CaretRightOutlined, EditOutlined, TransactionOutlined, DollarOutlined, CopyrightOutlined, LinkOutlined } from '@ant-design/icons'
 import { getConfigData, startBot, stopBot, cancelBot, transfer, getStatus, updateConfigData, getActiveCoins, create_order } from '@/utils/apis'
 import EditModal from './EditModal'
 import styles from './styles.less'
 
 const MM = (props: any) => {
 
+  const [params] = useSearchParams()
+  const exchange = params.getAll('exchange')[0] || ''
+  const coin = params.getAll('coin')[0] || ''
+
   const [showEditModal, setShowEditModal] = useState(false)
   const [strategies, setStrategies] = useState([])
   const [selectedRow, setSelectedRow] = useState()
-  const [activeStrategy, setActiveStrategy] = useState('Bitmart')
-  const [activeCoin, setActiveCoin] = useState('')
   const [activeCoinList, setActiveCoinList] = useState([])
   const [configLoading, setConfigLoading] = useState(false)
   const [statusLoading, setStatusLoading] = useState(false)
@@ -159,8 +162,8 @@ const MM = (props: any) => {
     }
     const data = await updateConfigData({
       key: 1234,
-      exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeCoin,
+      exchange_name: exchange.toLowerCase(),
+      coin_name: coin,
       body: newConfig,
     })
     if (data) {
@@ -173,8 +176,8 @@ const MM = (props: any) => {
     setStatusLoading(true)
     const data = await stopBot({
       key: 1234,
-      exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeCoin,
+      exchange_name: exchange.toLowerCase(),
+      coin_name: coin,
       bot_type: name
     })
     if (data == 'Successful') {
@@ -187,8 +190,8 @@ const MM = (props: any) => {
     setStatusLoading(true)
     const data = await startBot({
       key: 1234,
-      exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeCoin,
+      exchange_name: exchange.toLowerCase(),
+      coin_name: coin,
       bot_type: name
     })
     if (data == 'Successful') {
@@ -201,8 +204,8 @@ const MM = (props: any) => {
     setStatusLoading(true)
     const data = await cancelBot({
       key: 1234,
-      exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeCoin,
+      exchange_name: exchange.toLowerCase(),
+      coin_name: coin,
       bot_type: name,
       side: side,
     })
@@ -217,8 +220,8 @@ const MM = (props: any) => {
       if (item.running && item.uid != 'Total Balance') {
         await stopBot({
           key: 1234,
-          exchange_name: activeStrategy.toLowerCase(),
-          coin_name: activeCoin,
+          exchange_name: exchange.toLowerCase(),
+          coin_name: coin,
           bot_type: item.name
         })
       }
@@ -231,8 +234,8 @@ const MM = (props: any) => {
       if (!item.running && item.uid != 'Total Balance') {
         await startBot({
           key: 1234,
-          exchange_name: activeStrategy.toLowerCase(),
-          coin_name: activeCoin,
+          exchange_name: exchange.toLowerCase(),
+          coin_name: coin,
           bot_type: item.name
         })
       }
@@ -248,22 +251,22 @@ const MM = (props: any) => {
       if (item.running) {
         await stopBot({
           key: 1234,
-          exchange_name: activeStrategy.toLowerCase(),
-          coin_name: activeCoin,
+          exchange_name: exchange.toLowerCase(),
+          coin_name: coin,
           bot_type: item.name
         })
       }
       await cancelBot({
         key: 1234,
-        exchange_name: activeStrategy.toLowerCase(),
-        coin_name: activeCoin,
+        exchange_name: exchange.toLowerCase(),
+        coin_name: coin,
         bot_type: item.name,
         side: side,
       })
       await startBot({
         key: 1234,
-        exchange_name: activeStrategy.toLowerCase(),
-        coin_name: activeCoin,
+        exchange_name: exchange.toLowerCase(),
+        coin_name: coin,
         bot_type: item.name
       })
     })
@@ -273,8 +276,8 @@ const MM = (props: any) => {
   const transferToFuture = async (name: string, amount: string) => {
     await transfer({
       key: 1234,
-      exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeCoin,
+      exchange_name: exchange.toLowerCase(),
+      coin_name: coin,
       bot_type: name,
       amount: amount,
     })
@@ -284,7 +287,7 @@ const MM = (props: any) => {
   const getBotStatus = async () => {
     setStatusLoading(true)
     setBotStatus([])
-    const data = await getStatus({ key: 1234, exchange_name: activeStrategy.toLowerCase(), coin_name: activeCoin })
+    const data = await getStatus({ key: 1234, exchange_name: exchange.toLowerCase(), coin_name: coin })
     if (data) {
       let res = []
       for (let key in data[0]) {
@@ -320,8 +323,8 @@ const MM = (props: any) => {
     setConfigLoading(true)
     const data = await getConfigData({
       key: 1234,
-      exchange_name: activeStrategy.toLowerCase(),
-      coin_name: activeCoin
+      exchange_name: exchange.toLowerCase(),
+      coin_name: coin
     })
     if (data.Maker) {
       const list = [
@@ -368,31 +371,30 @@ const MM = (props: any) => {
   }
 
   const getCoins = async () => {
-    const data = await getActiveCoins({ key: 1234, exchange_name: activeStrategy.toLowerCase() })
+    const data = await getActiveCoins({ key: 1234, exchange_name: exchange.toLowerCase() })
     if (data) {
       setActiveCoinList(data)
-      setActiveCoin(data[0])
     }
   }
 
   useEffect(() => {
     getCoins()
-  }, [activeStrategy])
+  }, [exchange])
 
   useEffect(() => {
-    if (activeCoin) {
+    if (coin) {
       getConfig()
       getBotStatus()
     }
-  }, [activeCoin])
+  }, [coin])
 
-  useEffect(()=>{
-    if(showBuySell == 'Buy') {
+  useEffect(() => {
+    if (showBuySell == 'Buy') {
       setBuySellAmount(usdtAmount / buyPrice)
     } else if (showBuySell == 'Sell') {
       setBuySellAmount(usdtAmount / sellPrice)
     }
-  },[usdtAmount])
+  }, [usdtAmount])
 
   return (
     <div>
@@ -400,46 +402,49 @@ const MM = (props: any) => {
         <div style={{ borderBottom: '1px solid #333333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ float: 'left', display: 'flex' }}>
             <h3
-              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'Bitmart' ? 'white' : '#ffffffb3' }}
-              onClick={() => setActiveStrategy("Bitmart")}
+              style={{ cursor: 'pointer', fontFamily: 'unset', color: exchange == 'bitmart' ? 'white' : '#ffffffb3' }}
+              onClick={() => { window.location.href = '/mm?exchange=bitmart&coin=QH' }}
             >
               Bitmart
             </h3>
             <h3
-              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'Digifinex' ? 'white' : '#ffffffb3' }}
-              onClick={() => setActiveStrategy("Digifinex")}
+              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: exchange == 'digifinex' ? 'white' : '#ffffffb3' }}
+              onClick={() => { window.location.href = '/mm?exchange=digifinex&coin=HUNTER' }}
             >
               Digifinex
             </h3>
             <h3
-              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'Toobit' ? 'white' : '#ffffffb3' }}
-              onClick={() => setActiveStrategy("Toobit")}
+              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: exchange == 'toobit' ? 'white' : '#ffffffb3' }}
+              onClick={() => { window.location.href = '/mm?exchange=toobit&coin=MAKA' }}
             >
               Toobit
             </h3>
             <h3
-              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'MEXC' ? 'white' : '#ffffffb3' }}
-              onClick={() => setActiveStrategy("MEXC")}
+              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: exchange == 'mexc' ? 'white' : '#ffffffb3' }}
+              onClick={() => { window.location.href = '/mm?exchange=mexc&coin=SNRN' }}
             >
               MEXC
             </h3>
             <h3
-              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: activeStrategy == 'XT' ? 'white' : '#ffffffb3' }}
-              onClick={() => setActiveStrategy("XT")}
+              style={{ marginLeft: 20, cursor: 'pointer', fontFamily: 'unset', color: exchange == 'xt' ? 'white' : '#ffffffb3' }}
+              onClick={() => { window.location.href = '/mm?exchange=xt&coin=MAKA' }}
             >
               XT.COM
             </h3>
           </div>
         </div>
-        <div style={{ float: 'left', display: 'flex', marginTop: 20 }}>
-          {activeCoinList.map(coin => {
-            return <span
-              style={{ cursor: 'pointer', fontFamily: 'unset', color: activeCoin == coin ? 'white' : '#ffffffb3', marginRight: 20 }}
-              onClick={() => { setActiveCoin(coin) }}
-            >
-              {coin}
-            </span>
-          })}
+        <div style={{ float: 'left', display: 'flex', marginTop: 20, justifyContent: 'space-between' }}>
+          <div>
+            {activeCoinList.map(item => {
+              return <span
+                style={{ cursor: 'pointer', fontFamily: 'unset', color: coin == item ? 'white' : '#ffffffb3', marginRight: 20 }}
+                onClick={() => { window.location.href = `/mm?exchange=${exchange}&coin=${item}` }}
+              >
+                {item}
+              </span>
+            })}
+          </div>
+          {exchange == 'mexc' && <LinkOutlined style={{ color: 'white', marginRight: 10 }} onClick={() => { window.open(`https://www.mexc.com/exchange/${coin}_USDT`) }} />}
         </div>
       </div>
       <div style={{ padding: '10px 250px' }}>
@@ -495,7 +500,7 @@ const MM = (props: any) => {
                 }
               },
               {
-                title: activeCoin,
+                title: coin,
                 dataIndex: 'quote_balance',
                 render: (_, entry: any) => {
                   return (
@@ -588,9 +593,9 @@ const MM = (props: any) => {
                       }
                       }
                     >
-                      <Tooltip title={`free ${activeCoin}`}><CopyrightOutlined style={{ color: 'white' }} /></Tooltip>
+                      <Tooltip title={`free ${coin}`}><CopyrightOutlined style={{ color: 'white' }} /></Tooltip>
                     </Button>
-                    {activeStrategy == 'MEXC' && entry.name != '' && <Button
+                    {exchange == 'mexc' && entry.name != '' && <Button
                       type="link"
                       style={{ color: 'white' }}
                       onClick={() => {
@@ -601,7 +606,7 @@ const MM = (props: any) => {
                     >
                       buy
                     </Button>}
-                    {activeStrategy == 'MEXC' && entry.name != '' && <Button
+                    {exchange == 'mexc' && entry.name != '' && <Button
                       type="link"
                       style={{ color: 'white', marginLeft: -8 }}
                       onClick={() => {
@@ -625,12 +630,12 @@ const MM = (props: any) => {
         open={showBuySell != ''}
         className={styles.transferModal}
         footer={null}
-        onCancel={() => { setShowBuySell('');setBuySellAmount('0');setUsdtAmount('0'); }}
+        onCancel={() => { setShowBuySell(''); setBuySellAmount('0'); setUsdtAmount('0'); }}
       >
         <Form layout='horizontal' style={{ marginTop: 30 }}>
           {showBuySell == 'Buy'
             ? <div style={{ fontSize: 15, color: '#b6b6b5', marginBottom: 20 }}>Available: <span style={{ color: 'white' }}>{balance}</span> USDT</div>
-            : <div style={{ fontSize: 15, color: '#b6b6b5', marginBottom: 20 }}>Available: <span style={{ color: 'white' }}>{(balance / sellPrice).toFixed(2)}</span> {activeCoin} ({balance} USDT)</div>
+            : <div style={{ fontSize: 15, color: '#b6b6b5', marginBottom: 20 }}>Available: <span style={{ color: 'white' }}>{(balance / sellPrice).toFixed(2)}</span> {coin} ({balance} USDT)</div>
           }
           <Form.Item>
             <div style={{ fontSize: 15, color: '#b6b6b5' }}>Price</div>
@@ -644,8 +649,8 @@ const MM = (props: any) => {
           </Form.Item>
           <Form.Item>
             <div style={{ fontSize: 15, color: '#b6b6b5' }}>
-              Amount 
-              <span style={{ fontSize: 14, color: '#b6b6b5', marginLeft: 5}}>( {Number(buySellAmount).toFixed(4)} {activeCoin} )</span>
+              Amount
+              <span style={{ fontSize: 14, color: '#b6b6b5', marginLeft: 5 }}>( {Number(buySellAmount).toFixed(4)} {coin} )</span>
             </div>
             <Input
               className={styles.myInput}
@@ -654,18 +659,18 @@ const MM = (props: any) => {
               style={{ height: 40, background: 'transparent', border: '1px solid #333333', color: 'white' }}
               suffix="USDT"
             />
-            
+
           </Form.Item>
         </Form>
         <Button
           className={styles.confirmButton}
           disabled={!Number(buyPrice) || buyPrice == '0' || !Number(sellPrice) || sellPrice == '0' || !Number(buySellAmount) || buySellAmount == '0'}
           onClick={async () => {
-            if(usdtAmount < 5) {
+            if (usdtAmount < 5) {
               message.error('Amount cannot be less than 5 USDT')
               return
             }
-            if(showBuySell == 'Buy' && balance < usdtAmount) {
+            if (showBuySell == 'Buy' && balance < usdtAmount) {
               message.error('Insufficient balance')
               return
             }
@@ -675,8 +680,8 @@ const MM = (props: any) => {
             setStatusLoading(true)
             const data = await create_order({
               key: 1234,
-              exchange_name: activeStrategy.toLowerCase(),
-              coin_name: activeCoin,
+              exchange_name: exchange.toLowerCase(),
+              coin_name: coin,
               bot_type: botIdx,
               side: showBuySell.toLowerCase(),
               amount: buySellAmount,
@@ -688,7 +693,7 @@ const MM = (props: any) => {
             setStatusLoading(false)
           }}
         >
-          {showBuySell} {activeCoin}
+          {showBuySell} {coin}
         </Button>
       </Modal>
     </div>

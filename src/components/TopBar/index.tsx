@@ -19,7 +19,7 @@ const TopBar = () => {
         <img width={90} src="/logo.svg" style={{ margin: 10, cursor: 'pointer' }} onClick={() => { window.location.href = '/' }} />
       </div>
       <div style={{ width: '70%' }} hidden={!account || !whiteListedAccounts.includes(account)}>
-        <span className={styles.menuItem} onClick={() => { window.location.href = '/mm' }}>Market Making</span>
+        <span className={styles.menuItem} onClick={() => { window.location.href = '/mm?exchange=mexc&coin=SNRN' }}>Market Making</span>
         <span className={styles.menuItem} onClick={() => { }}>Asset Management</span>
         <span className={styles.menuItem} onClick={() => { window.location.href = '/otc' }}>OTC</span>
         <span className={styles.menuItem} onClick={() => { }}>Snipper</span>
