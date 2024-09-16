@@ -8,7 +8,7 @@ const OTC = (props: any) => {
   const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
   const [otcRunning, setOtcRunning] = useState(false)
-  const [timeLimit, setTimeLimit] = useState(0)
+  const [timeLimit, setTimeLimit] = useState(5)
 
   const getBotStatus = async () => {
     setStatusLoading(true)
@@ -71,7 +71,7 @@ const OTC = (props: any) => {
               onChange={(e: any) => { setTimeLimit(e.target.value) }}
               style={{ height: 40, width: 100, background: 'transparent', border: '1px solid #333333', color: 'white' }}
             />
-            <span style={{ marginLeft: 10, color: 'white', fontSize: 16 }}>(minutes)</span>
+            <span style={{ marginLeft: 10, color: 'white', fontSize: 16 }}>minutes valid</span>
           </div>
         </div>
         <Spin spinning={statusLoading}>
