@@ -43,7 +43,7 @@ const OTC = (props: any) => {
         message.success('OTC Strategy Stopped')
       }
     } else {
-      const data = await startOtc({ key: 1234, time: timeInterval })
+      const data = await startOtc({ key: 1234, time: timeInterval, valid: valid })
       if (data == 'Successful') {
         setOtcRunning(true)
         message.success('OTC Strategy Started')
