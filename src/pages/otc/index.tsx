@@ -8,7 +8,8 @@ const OTC = (props: any) => {
   const [statusLoading, setStatusLoading] = useState(false)
   const [botStatus, setBotStatus] = useState([])
   const [otcRunning, setOtcRunning] = useState(false)
-  const [timeLimit, setTimeLimit] = useState(5)
+  const [timeInterval, setTimeInterval] = useState(5)
+  const [valid, setValid] = useState(5)
 
   const getBotStatus = async () => {
     setStatusLoading(true)
@@ -42,7 +43,7 @@ const OTC = (props: any) => {
         message.success('OTC Strategy Stopped')
       }
     } else {
-      const data = await startOtc({ key: 1234, time: timeLimit })
+      const data = await startOtc({ key: 1234, time: timeInterval })
       if (data == 'Successful') {
         setOtcRunning(true)
         message.success('OTC Strategy Started')
@@ -64,14 +65,25 @@ const OTC = (props: any) => {
           >
             {otcRunning ? 'Stop OTC' : 'Start OTC'}
           </Button>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Input
-              value={timeLimit}
-              type='number'
-              onChange={(e: any) => { setTimeLimit(e.target.value) }}
-              style={{ height: 40, width: 100, background: 'transparent', border: '1px solid #333333', color: 'white' }}
-            />
-            <span style={{ marginLeft: 10, color: 'white', fontSize: 16 }}>minutes valid</span>
+          <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
+              <Input
+                value={timeInterval}
+                type='number'
+                onChange={(e: any) => { setTimeInterval(e.target.value) }}
+                style={{ height: 40, width: 70, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+              />
+              <span style={{ marginLeft: 10, color: 'white', fontSize: 16 }}>s interval</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Input
+                value={valid}
+                type='number'
+                onChange={(e: any) => { setValid(e.target.value) }}
+                style={{ height: 40, width: 70, background: 'transparent', border: '1px solid #333333', color: 'white' }}
+              />
+              <span style={{ marginLeft: 10, color: 'white', fontSize: 16 }}>min valid</span>
+            </div>
           </div>
         </div>
         <Spin spinning={statusLoading}>
